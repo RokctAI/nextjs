@@ -1,0 +1,113 @@
+/* ROK Global Design System & Variables */
+@import "tailwindcss";
+
+:root {
+  /* HSL Color Palette */
+  --bg-deep: 0 0% 5%;          /* #0d0d0d */
+  --bg-card: 0 0% 9%;          /* #171717 */
+  --bg-panel: 0 0% 13%;        /* #212121 */
+  
+  --primary: 24 100% 50%;      /* Safety Orange/Amber */
+  --primary-glow: 24 100% 50% / 0.15;
+  --primary-hover: 24 100% 45%;
+  
+  --accent-gold: 43 100% 52%;  /* High Vis Gold */
+  --accent-steel: 215 15% 75%; /* Steel Grey */
+  --accent-cyan: 180 100% 45%;  /* Electric Mine Teal/Cyan */
+  
+  --text-primary: 0 0% 98%;    /* Off-white */
+  --text-secondary: 0 0% 70%;  /* Muted Grey */
+  --text-muted: 0 0% 50%;      /* Dimmed Grey */
+  
+  --border-subtle: 0 0% 16%;
+  --border-active: 24 100% 50% / 0.4;
+  
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+
+  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: hsl(var(--bg-deep));
+  color: hsl(var(--text-primary));
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: hsl(var(--bg-deep));
+  color: hsl(var(--text-primary));
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Premium Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--bg-deep));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--bg-panel));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Micro-animations and Utilities */
+.glass {
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-accent {
+  background: rgba(24, 20, 18, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsla(var(--primary) / 0.15);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 30%, hsla(var(--primary) / 1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-accent-text {
+  background: linear-gradient(135deg, hsla(var(--accent-gold) / 1) 0%, hsla(var(--primary) / 1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Card hover glow */
+.hover-glow {
+  transition: all 0.3s var(--transition-smooth);
+}
+.hover-glow:hover {
+  border-color: hsla(var(--primary) / 0.3);
+  box-shadow: 0 10px 30px -10px hsla(var(--primary) / 0.2);
+  transform: translateY(-4px);
+}
+
+/* Badge active styling */
+.badge-female {
+  background: linear-gradient(90deg, rgba(236, 72, 153, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #f472b6;
+}
