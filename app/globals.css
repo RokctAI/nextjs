@@ -104,6 +104,45 @@ body {
   color: #fff;
 }
 
+/*
+ * The platform scrollbar (base_sdk app/styles/rokct-scroll.css, the block
+ * the fleet shells merged: southriver-web#12, hosting#24, polaris-web#12),
+ * inlined because this site is not composed from base_sdk. Same rules and
+ * variables; the thumb follows Tloumoka blue (--color-brand) and deepens to
+ * --color-brand-deep on hover. `html:root` matches the shells' override.
+ */
+html:root {
+  --rokct-scroll-width: 6px;
+  --rokct-scroll-track: transparent;
+  --rokct-scroll-thumb: var(--color-brand);
+  --rokct-scroll-thumb-hover: var(--color-brand-deep);
+}
+
+::-webkit-scrollbar {
+  width: var(--rokct-scroll-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--rokct-scroll-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rokct-scroll-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rokct-scroll-thumb-hover);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--rokct-scroll-thumb);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--rokct-scroll-thumb-hover);
+}
+
 :focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 3px;
