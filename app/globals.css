@@ -3,6 +3,10 @@
    (Tloumoka blue, from the logo) with gold reserved for the crescent mark. Bold grotesk headlines, generous space, quiet motion. */
 @import "tailwindcss";
 
+/* Dark mode follows the `dark` class next-themes writes on <html> (the fleet
+   pattern), not the media query, so the header toggle can override the OS. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-page: #fafaf8;
   --color-stage: #efeeea;
@@ -84,6 +88,68 @@
   }
 }
 
+/* Night studio: Tloumoka's dark theme, on the same tokens.
+   Deep ink-navy grounds that step up as surfaces rise (page < band < card),
+   cool off-white ink, and the brand blue lifted to #4c9be0 so it reads as text
+   (6.4:1 on the page, 5.4:1 on a card). `white`, the card and on-colour token,
+   becomes the raised navy: cards lift off the page, and type set "white" on
+   an ink or blue button reads navy on light (14.3:1 and 5.4:1). Every text
+   pairing clears WCAG AA. */
+.dark {
+  color-scheme: dark;
+  --color-page: #0b1018;
+  --color-stage: #121a26;
+  --color-stage-2: #1a2433;
+  --color-line: #222d3d;
+  --color-line-2: #34425a;
+  --color-ink: #eef1f6;
+  --color-ink-2: #b9c2d0;
+  --color-ink-3: #8d98aa;
+  --color-night: #05080d;
+  --color-night-2: #0f1622;
+  --color-night-3: #1d2635;
+  --color-mist: #a9b3c3;
+  --color-brand: #4c9be0;
+  --color-brand-deep: #2f7fc6;
+  --color-brand-soft: #14263d;
+  --color-white: #172131;
+}
+
+/* Light islands inside the dark theme: the product stages and drawings (so
+   the imagery is exactly as lit in light mode), the sections and panels that
+   are dark in both themes (`on-dark`, `ink-slab`), and anything marked
+   `keep-light`. They get the light token set back. */
+.dark :is(.stage, .keep-light, .on-dark, .ink-slab) {
+  --color-page: #fafaf8;
+  --color-stage: #efeeea;
+  --color-stage-2: #e5e3de;
+  --color-line: #e2e0db;
+  --color-line-2: #cfccc5;
+  --color-ink: #111214;
+  --color-ink-2: #44464c;
+  --color-ink-3: #74767c;
+  --color-brand: #1670b8;
+  --color-brand-deep: #0f5794;
+  --color-brand-soft: #e5eff8;
+  --color-white: #fff;
+}
+.dark :is(.stage, .keep-light) {
+  color-scheme: light;
+}
+/* The ink panels (contact details, "how we address it", ...) sit on the
+   night surface in dark mode, with a hairline to lift them off the page. */
+.dark .ink-slab {
+  background-color: var(--color-night-2);
+  box-shadow: inset 0 0 0 1px var(--color-night-3);
+}
+/* The home hero's backdrop panel goes to a night stage; the product inside
+   it keeps its own lit frame. */
+.dark .hero-stage {
+  background:
+    radial-gradient(110% 90% at 30% 0%, #1b2638 0%, transparent 62%),
+    linear-gradient(180deg, #121a27 0%, #0d131d 100%);
+}
+
 html {
   scroll-behavior: smooth;
   background-color: var(--color-page);
@@ -147,6 +213,10 @@ html:root {
   outline: 2px solid var(--color-brand);
   outline-offset: 3px;
 }
+.dark ::selection {
+  color: var(--color-page);
+}
+
 .on-dark :focus-visible {
   outline-color: var(--color-brand-glow);
 }
@@ -191,6 +261,9 @@ html:root {
     transition:
       border-color 0.2s,
       box-shadow 0.2s;
+  }
+  .dark .field {
+    background: var(--color-page);
   }
   .field::placeholder {
     color: color-mix(in oklab, var(--color-ink-3) 75%, transparent);

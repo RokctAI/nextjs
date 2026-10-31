@@ -32,7 +32,7 @@ export default function ContactPage() {
             </Suspense>
           </div>
           <aside className="space-y-5 lg:col-span-5">
-            <div className="rounded-[28px] bg-ink p-8 text-white sm:p-10">
+            <div className="ink-slab rounded-[28px] bg-ink p-8 text-white sm:p-10">
               <Eyebrow className="text-brand-glow">Direct</Eyebrow>
               <ul className="mt-8 space-y-7">
                 <li className="flex gap-4">

@@ -67,7 +67,7 @@ export default function IndustriesPage() {
                     ))}
                   </ul>
                 </div>
-                <div className="rounded-[24px] bg-ink p-7 text-white">
+                <div className="ink-slab rounded-[24px] bg-ink p-7 text-white">
                   <h3 className="eyebrow text-brand-glow">How we address it</h3>
                   <ul className="mt-5 space-y-4">
                     {ind.response.map((r) => (

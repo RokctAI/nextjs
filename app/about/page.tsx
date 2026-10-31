@@ -131,7 +131,7 @@ export default function AboutPage() {
                 key={w.title}
                 data-reveal
                 style={{ ["--reveal-delay" as string]: `${(i % 2) * 90}ms` }}
-                className={`rounded-[24px] p-7 ${w.title === "Empowering women" ? "bg-ink text-white sm:col-span-2" : "bg-white shadow-[0_1px_0_var(--color-line)]"}`}
+                className={`rounded-[24px] p-7 ${w.title === "Empowering women" ? "ink-slab bg-ink text-white sm:col-span-2" : "bg-white shadow-[0_1px_0_var(--color-line)]"}`}
               >
                 <span className={`text-[13px] tabular-nums ${w.title === "Empowering women" ? "text-gold" : "text-brand"}`}>
                   {String(i + 1).padStart(2, "0")}
@@ -161,7 +161,7 @@ export default function AboutPage() {
               </li>
             ))}
           </ul>
-          <div data-reveal className="mt-16 flex flex-col items-start justify-between gap-6 rounded-[28px] bg-brand p-8 text-white sm:flex-row sm:items-center sm:p-12">
+          <div data-reveal className="mt-16 flex flex-col items-start justify-between gap-6 keep-light rounded-[28px] bg-brand p-8 text-white sm:flex-row sm:items-center sm:p-12">
             <p className="display max-w-xl text-[clamp(1.8rem,3vw,2.6rem)]">Let&apos;s build a safer, more inclusive site together.</p>
             <ButtonLink href="/contact#enquiry" variant="light">
               Get in touch

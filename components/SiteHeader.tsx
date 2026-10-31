@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Logo from "@/components/Logo";
+import ThemeToggle from "@/components/ThemeToggle";
 import { BRAND, CONTACT, NAV, SERVICES } from "@/lib/site";
 
 export default function SiteHeader() {
@@ -77,6 +78,7 @@ export default function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle className="hidden lg:flex" />
           <Link
             href="/contact#enquiry"
             className="group hidden h-11 items-center gap-2 rounded-full bg-ink px-5 text-[14px] font-semibold text-white transition-colors hover:bg-brand sm:inline-flex"
@@ -110,15 +112,18 @@ export default function SiteHeader() {
             <Link href="/" onClick={() => setOpen(false)} aria-label={`${BRAND} home`}>
               <Logo />
             </Link>
-            <button
-              ref={closeRef}
-              type="button"
-              onClick={close}
-              aria-label="Close menu"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-line-2 text-ink"
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-            </button>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={close}
+                aria-label="Close menu"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-line-2 text-ink"
+              >
+                <X className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
           </div>
           <nav aria-label="Mobile" className="flex-1 overflow-y-auto px-4 pb-10 pt-6 sm:px-8">
             <ul className="space-y-1">

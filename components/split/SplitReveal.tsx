@@ -148,7 +148,7 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
         data-dragging={dragging ? "" : undefined}
         data-demo={demo ? "" : undefined}
         data-moved={moved ? "" : undefined}
-        className="split-frame group/split relative isolate cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-[32px] bg-stage shadow-[0_40px_80px_-48px_rgba(17,18,20,0.45)] ring-1 ring-black/5"
+        className="split-frame keep-light group/split relative isolate cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-[32px] bg-stage shadow-[0_40px_80px_-48px_rgba(17,18,20,0.45)] ring-1 ring-black/5"
         style={{ aspectRatio: `${W} / ${H}`, ["--pos" as string]: pos }}
         onPointerDown={(e) => {
           if (e.pointerType === "mouse" && e.button !== 0) return;

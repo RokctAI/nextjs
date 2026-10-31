@@ -26,7 +26,7 @@ export default function Home() {
 function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="stage absolute inset-x-0 bottom-0 top-0 lg:left-[50%] lg:rounded-bl-[48px]" aria-hidden="true" />
+      <div className="stage hero-stage absolute inset-x-0 bottom-0 top-0 lg:left-[50%] lg:rounded-bl-[48px]" aria-hidden="true" />
       <Container className="relative grid min-h-[calc(100svh-72px)] gap-10 pb-12 pt-10 lg:grid-cols-12 lg:gap-6 lg:pb-16 lg:pt-16">
         <div className="flex flex-col justify-center lg:col-span-6">
           <Eyebrow className="animate-rise text-brand">100% black woman-owned · Est. {FOUNDED}</Eyebrow>

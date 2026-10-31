@@ -80,7 +80,7 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
             ))}
             {service.offerings.length % 3 !== 0 && service.offerings.length !== 4 && (
               <li data-reveal className={service.offerings.length % 3 === 1 ? "lg:col-span-2" : ""}>
-                <div className="flex h-full min-h-[320px] flex-col justify-between rounded-[24px] bg-ink p-8 text-white">
+                <div className="flex h-full min-h-[320px] flex-col justify-between ink-slab rounded-[24px] bg-ink p-8 text-white">
                   <p className="eyebrow text-brand-glow">Something specific?</p>
                   <div>
                     <p className="display text-[clamp(1.9rem,2.6vw,2.5rem)]">Tell us what your machines or teams need.</p>

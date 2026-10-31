@@ -8,7 +8,7 @@ export default function MapCard() {
       href={CONTACT.mapsHref}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative block overflow-hidden rounded-[28px] bg-[#e9e6df]"
+      className="keep-light group relative block overflow-hidden rounded-[28px] bg-[#e9e6df]"
       aria-label="Open our location in Google Maps (opens in a new tab)"
     >
       <svg viewBox="0 0 600 380" className="block h-auto w-full" aria-hidden="true">
