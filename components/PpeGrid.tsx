@@ -1,20 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
-import { Shield, ShoppingCart, Tag, Filter, Check } from "lucide-react";
+import { useState } from "react";
+import { Check, Plus } from "lucide-react";
+import Pictogram, { type PictogramKind } from "@/components/Pictograms";
+import type { AddToRfq } from "@/components/types";
 
 interface PpeGridProps {
-  onAddProduct: (item: { id: string; name: string; category: string; price: string }) => void;
+  onAddProduct: AddToRfq;
 }
 
-const PRODUCTS = [
+const PRODUCTS: {
+  id: string;
+  name: string;
+  category: string;
+  price: string;
+  description: string;
+  specs: string[];
+  pictogram: PictogramKind;
+}[] = [
   {
     id: "boots-b01",
     name: "IronFort Steel-Toe Mining Boots",
     category: "Footwear",
     price: "R 1,450.00",
     description: "SABS approved double-reinforced steel cap, anti-puncture steel shank, oil and acid-resistant rubber sole.",
-    specs: ["Duo-density polyurethane", "Thermal insulating lining"]
+    specs: ["Duo-density polyurethane", "Thermal insulating lining"],
+    pictogram: "boot",
   },
   {
     id: "respirator-r04",
@@ -22,7 +33,8 @@ const PRODUCTS = [
     category: "Safety Gear",
     price: "R 2,100.00",
     description: "Advanced active charcoal multi-gas filter designed for low-oxygen high-silica dust levels inside active galleries.",
-    specs: ["SABS Class 3 rated", "Silicon leak-free facepiece"]
+    specs: ["SABS Class 3 rated", "Silicon leak-free facepiece"],
+    pictogram: "respirator",
   },
   {
     id: "harness-m1",
@@ -30,7 +42,8 @@ const PRODUCTS = [
     category: "Safety Gear",
     price: "R 1,890.00",
     description: "Engineered fallback protection featuring integrated lumbar tool support and quick-connect rescue handles.",
-    specs: ["Webbing strength 25kN", "Salt-spray rustproof buckles"]
+    specs: ["Webbing strength 25kN", "Salt-spray rustproof buckles"],
+    pictogram: "harness",
   },
   {
     id: "helmet-h12",
@@ -38,7 +51,8 @@ const PRODUCTS = [
     category: "Accessories",
     price: "R 850.00",
     description: "High-density poly-carbonate mine shell with fully integrated heavy-duty lamp bracket and sound-muffling earmuff locks.",
-    specs: ["Tested up to 20kV", "6-point textile suspension"]
+    specs: ["Tested up to 20kV", "6-point textile suspension"],
+    pictogram: "helmet",
   },
   {
     id: "gloves-g07",
@@ -46,7 +60,8 @@ const PRODUCTS = [
     category: "Safety Gear",
     price: "R 320.00",
     description: "Heavy nitrile-coated safety gauntlets providing high chemical resistance and protection up to 250°C.",
-    specs: ["EN 388 Level 4 abrasion", "Elbow length protective sleeve"]
+    specs: ["EN 388 Level 4 abrasion", "Elbow length protective sleeve"],
+    pictogram: "glove",
   },
   {
     id: "goggles-g11",
@@ -54,8 +69,9 @@ const PRODUCTS = [
     category: "Accessories",
     price: "R 280.00",
     description: "Anti-fog, scratch-resistant polycarbonate lens providing full panoramic seal against fine dust particle ingestion.",
-    specs: ["99.9% UVA/UVB shield", "Soft thermal-plastic body"]
-  }
+    specs: ["99.9% UVA/UVB shield", "Soft thermal-plastic body"],
+    pictogram: "goggles",
+  },
 ];
 
 const CATEGORIES = ["All", "Safety Gear", "Footwear", "Accessories"];
@@ -64,136 +80,132 @@ export default function PpeGrid({ onAddProduct }: PpeGridProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [justAddedId, setJustAddedId] = useState<string | null>(null);
 
-  const filteredProducts = selectedCategory === "All"
-    ? PRODUCTS
-    : PRODUCTS.filter(p => p.category === selectedCategory);
+  const filteredProducts =
+    selectedCategory === "All" ? PRODUCTS : PRODUCTS.filter((p) => p.category === selectedCategory);
 
-  const handleAdd = (product: typeof PRODUCTS[0]) => {
+  const handleAdd = (product: (typeof PRODUCTS)[number]) => {
     onAddProduct({
       id: product.id,
       name: product.name,
       category: product.category,
-      price: product.price
+      price: product.price,
     });
     setJustAddedId(product.id);
-    setTimeout(() => {
-      setJustAddedId(null);
-    }, 1500);
+    window.setTimeout(() => setJustAddedId(null), 1500);
   };
 
   return (
-    <section id="ppe" className="bg-black py-24 scroll-mt-20">
-      <div className="mx-auto max-w-7xl px-6">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-          <div className="text-left space-y-4 max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/5 px-4 py-1.5 text-xs font-semibold text-orange-500">
-              <Shield className="h-3.5 w-3.5" />
-              <span>ROK OFF-THE-SHELF PPE</span>
-            </div>
-            <h2 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-              MINING-GRADE PROTECTIVE CATALOG
-            </h2>
-            <p className="text-zinc-400">
-              Built to meet and exceed SABS safety regulations. Explore our high-durability frontline gear catalog. Combine items to build a custom bulk procurement request.
-            </p>
+    <section id="ppe" className="scroll-mt-28 border-b border-ink bg-paper-2">
+      <div className="mx-auto max-w-[1320px] px-4 sm:px-6">
+        {/* Section head */}
+        <div className="grid gap-6 py-12 md:grid-cols-12 md:py-16">
+          <div className="md:col-span-2">
+            <span className="font-display text-7xl font-extrabold leading-none text-ink md:text-8xl">02</span>
           </div>
+          <div className="md:col-span-6">
+            <p className="eyebrow text-ink-3">ROK off-the-shelf PPE</p>
+            <h2 className="mt-3 font-display text-5xl font-extrabold uppercase leading-[0.9] text-ink md:text-6xl lg:text-7xl">
+              Mining-grade protective catalog
+            </h2>
+          </div>
+          <p className="self-end text-lg leading-relaxed text-ink-2 md:col-span-4">
+            Built to meet and exceed SABS safety regulations. Explore our high-durability frontline gear catalog. Combine items to build a custom bulk procurement request.
+          </p>
+        </div>
 
-          {/* Filters */}
-          <div className="flex flex-wrap gap-2 items-center bg-zinc-900/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-sm self-start md:self-end">
-            {CATEGORIES.map((cat) => (
+        {/* Index tabs */}
+        <div role="group" aria-label="Filter by category" className="flex overflow-x-auto border-b border-ink [scrollbar-width:none]">
+          {CATEGORIES.map((cat) => {
+            const count = cat === "All" ? PRODUCTS.length : PRODUCTS.filter((p) => p.category === cat).length;
+            const active = selectedCategory === cat;
+            return (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setSelectedCategory(cat)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
-                  selectedCategory === cat
-                    ? "bg-white text-black shadow-md"
-                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                aria-pressed={active}
+                className={`-mb-px flex shrink-0 items-baseline gap-2 border border-b-0 px-4 py-3 font-display text-base font-bold uppercase tracking-[0.06em] transition-colors sm:px-5 ${
+                  active
+                    ? "border-ink bg-paper text-ink"
+                    : "border-transparent text-ink-3 hover:text-ink"
                 }`}
               >
                 {cat}
+                <span className="font-mono text-[10px] font-medium tabular-nums">{String(count).padStart(2, "0")}</span>
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Product Cards Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProducts.map((product) => {
-            const isAdded = justAddedId === product.id;
-            return (
-              <div
-                key={product.id}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/20 p-6 hover-glow"
-              >
-                {/* Visual Accent Corner */}
-                <div className="absolute top-0 right-0 h-16 w-16 bg-gradient-to-bl from-orange-500/5 to-transparent group-hover:from-orange-500/10 transition-colors"></div>
-
-                <div className="space-y-4">
-                  {/* Category and SKU Badge */}
-                  <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                    <span className="flex items-center gap-1">
-                      <Tag className="h-3 w-3 text-orange-500" />
-                      {product.category.toUpperCase()}
-                    </span>
-                    <span>SKU: {product.id.toUpperCase()}</span>
-                  </div>
-
-                  {/* Product Title */}
-                  <h3 className="font-display text-lg font-bold text-white group-hover:text-orange-400 transition-colors duration-200">
-                    {product.name}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-xs text-zinc-400 leading-relaxed min-h-[50px]">
-                    {product.description}
-                  </p>
-
-                  {/* Tech specs bullets */}
-                  <ul className="space-y-1.5 pt-2">
-                    {product.specs.map((spec, i) => (
-                      <li key={i} className="flex items-center gap-2 text-[10px] text-zinc-500 font-medium">
-                        <span className="h-1 w-1 rounded-full bg-orange-500"></span>
-                        {spec}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Add to RFQ Action Bar */}
-                <div className="flex items-center justify-between pt-6 mt-6 border-t border-white/5">
-                  <div className="flex flex-col text-left">
-                    <span className="text-[9px] font-mono tracking-wider text-zinc-500">RFQ EST. PRICE</span>
-                    <span className="text-lg font-black text-white">{product.price}</span>
-                  </div>
-
-                  <button
-                    onClick={() => handleAdd(product)}
-                    className={`flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-bold transition-all duration-200 ${
-                      isAdded
-                        ? "bg-green-600 text-white"
-                        : "bg-zinc-800 hover:bg-orange-600 text-white"
-                    }`}
-                  >
-                    {isAdded ? (
-                      <>
-                        <Check className="h-4 w-4" />
-                        Added
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingCart className="h-4 w-4" />
-                        Add to RFQ
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
             );
           })}
         </div>
 
+        {/* Ledger header */}
+        <div className="hidden grid-cols-12 gap-6 border-b border-rule bg-paper px-6 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-3 lg:grid">
+          <span className="col-span-2">Item / SKU</span>
+          <span className="col-span-5">Description</span>
+          <span className="col-span-2">Specification</span>
+          <span className="col-span-3 text-right">RFQ est. price</span>
+        </div>
+
+        {/* Ledger rows */}
+        <ul className="mb-16 border-b border-ink bg-paper md:mb-24">
+          {filteredProducts.map((product) => {
+            const isAdded = justAddedId === product.id;
+            const index = PRODUCTS.indexOf(product) + 1;
+            return (
+              <li
+                key={product.id}
+                className="group grid grid-cols-[64px_1fr] gap-x-4 gap-y-4 border-b border-rule px-4 py-6 last:border-b-0 sm:grid-cols-[88px_1fr] sm:px-6 lg:grid-cols-12 lg:gap-6 lg:py-7"
+              >
+                <div className="row-span-2 lg:col-span-2 lg:row-span-1 lg:flex lg:gap-4">
+                  <span
+                    className="flex aspect-square w-full items-center justify-center bg-ink text-paper transition-colors group-hover:bg-hivis group-hover:text-ink lg:w-[88px]"
+                   
+                  >
+                    <Pictogram kind={product.pictogram} className="h-[60%] w-[60%] [--cut:var(--color-ink)] group-hover:[--cut:var(--color-hivis)]" />
+                  </span>
+                  <div className="mt-2 font-mono text-[10px] uppercase leading-snug tracking-[0.08em] text-ink-3 lg:mt-0">
+                    <span className="block text-ink">{String(index).padStart(2, "0")}</span>
+                    <span className="hidden break-all lg:block">{product.id}</span>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-3">
+                    {product.category}
+                    <span className="lg:hidden"> · {product.id}</span>
+                  </p>
+                  <h3 className="mt-1 font-display text-2xl font-bold uppercase leading-tight text-ink md:text-[28px]">
+                    {product.name}
+                  </h3>
+                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-2">{product.description}</p>
+                </div>
+
+                <ul className="col-start-2 space-y-1.5 self-start font-mono text-xs text-ink-2 lg:col-span-2 lg:col-start-auto lg:pt-5">
+                  {product.specs.map((spec) => (
+                    <li key={spec} className="flex gap-2">
+                      <span className="mt-[7px] h-1.5 w-1.5 shrink-0 bg-hivis-deep" aria-hidden="true" />
+                      {spec}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="col-span-2 flex items-center justify-between gap-4 border-t border-rule pt-4 lg:col-span-3 lg:flex-col lg:items-end lg:justify-start lg:border-t-0 lg:pt-4">
+                  <p className="font-display text-3xl font-bold tabular-nums text-ink lg:text-4xl">{product.price}</p>
+                  <button
+                    type="button"
+                    onClick={() => handleAdd(product)}
+                    aria-label={`Add ${product.name} to RFQ`}
+                    className={`flex h-11 items-center gap-2 px-4 font-display text-[15px] font-bold uppercase tracking-[0.06em] transition-colors ${
+                      isAdded ? "bg-hivis text-ink" : "border border-ink text-ink hover:bg-ink hover:text-paper"
+                    }`}
+                  >
+                    {isAdded ? <Check className="h-4 w-4" aria-hidden="true" /> : <Plus className="h-4 w-4" aria-hidden="true" />}
+                    {isAdded ? "Added" : "Add to RFQ"}
+                  </button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

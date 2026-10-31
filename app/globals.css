@@ -1,113 +1,92 @@
-/* ROK Global Design System & Variables */
+/* ROK Industrial — "Spec Sheet" design system
+   Paper datasheet + shaft-dark bands, hi-vis fluorescent yellow used as a
+   material (tape, signage), never as a gradient. */
 @import "tailwindcss";
 
-:root {
-  /* HSL Color Palette */
-  --bg-deep: 0 0% 5%;          /* #0d0d0d */
-  --bg-card: 0 0% 9%;          /* #171717 */
-  --bg-panel: 0 0% 13%;        /* #212121 */
-  
-  --primary: 24 100% 50%;      /* Safety Orange/Amber */
-  --primary-glow: 24 100% 50% / 0.15;
-  --primary-hover: 24 100% 45%;
-  
-  --accent-gold: 43 100% 52%;  /* High Vis Gold */
-  --accent-steel: 215 15% 75%; /* Steel Grey */
-  --accent-cyan: 180 100% 45%;  /* Electric Mine Teal/Cyan */
-  
-  --text-primary: 0 0% 98%;    /* Off-white */
-  --text-secondary: 0 0% 70%;  /* Muted Grey */
-  --text-muted: 0 0% 50%;      /* Dimmed Grey */
-  
-  --border-subtle: 0 0% 16%;
-  --border-active: 24 100% 50% / 0.4;
-  
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+@theme {
+  --color-paper: #efece4;
+  --color-paper-2: #e6e2d7;
+  --color-paper-3: #d9d4c6;
+  --color-ink: #15140f;
+  --color-ink-2: #3a3830;
+  --color-ink-3: #6b675b;
+  --color-rule: #c9c3b3;
+  --color-shaft: #121310;
+  --color-shaft-2: #1b1c18;
+  --color-shaft-3: #272822;
+  --color-steel: #a6a89f;
+  --color-hivis: #d8f02a;
+  --color-hivis-deep: #b9d10f;
+  --color-signal: #c8371f;
 
-  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-barlow), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: hsl(var(--bg-deep));
-  color: hsl(var(--text-primary));
+  background-color: var(--color-paper);
+  color: var(--color-ink);
 }
 
 body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-sans);
-  background-color: hsl(var(--bg-deep));
-  color: hsl(var(--text-primary));
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+::selection {
+  background: var(--color-hivis);
+  color: var(--color-ink);
 }
 
-/* Premium Custom Scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
 }
-::-webkit-scrollbar-track {
-  background: hsl(var(--bg-deep));
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--bg-panel));
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
+.on-dark :focus-visible {
+  outline-color: var(--color-hivis);
 }
 
-/* Micro-animations and Utilities */
-.glass {
-  background: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(12px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+@layer components {
+  /* Yellow/black hazard chevron band (industrial signage) */
+  .hazard {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      var(--color-ink) 0 14px,
+      var(--color-hivis) 14px 28px
+    );
+  }
+
+  /* Faint drafting grid for technical drawings */
+  .drafting {
+    background-color: var(--color-paper-2);
+    background-image:
+      linear-gradient(to right, rgb(21 20 15 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(21 20 15 / 0.07) 1px, transparent 1px),
+      linear-gradient(to right, rgb(21 20 15 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(21 20 15 / 0.035) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
 }
 
-.glass-accent {
-  background: rgba(24, 20, 18, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid hsla(var(--primary) / 0.15);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #ffffff 30%, hsla(var(--primary) / 1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-accent-text {
-  background: linear-gradient(135deg, hsla(var(--accent-gold) / 1) 0%, hsla(var(--primary) / 1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Card hover glow */
-.hover-glow {
-  transition: all 0.3s var(--transition-smooth);
-}
-.hover-glow:hover {
-  border-color: hsla(var(--primary) / 0.3);
-  box-shadow: 0 10px 30px -10px hsla(var(--primary) / 0.2);
-  transform: translateY(-4px);
-}
-
-/* Badge active styling */
-.badge-female {
-  background: linear-gradient(90deg, rgba(236, 72, 153, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%);
-  border: 1px solid rgba(236, 72, 153, 0.3);
-  color: #f472b6;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

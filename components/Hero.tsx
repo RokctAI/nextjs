@@ -1,119 +1,123 @@
-"use client";
+import { ArrowDown, ArrowRight } from "lucide-react";
+import Pictogram, { type PictogramKind } from "@/components/Pictograms";
 
-import React from "react";
-import { ShieldAlert, ArrowDown, ChevronRight, Zap } from "lucide-react";
+const SIGN: { kind: PictogramKind; label: string }[] = [
+  { kind: "helmet", label: "Hardhat" },
+  { kind: "goggles", label: "Goggles" },
+  { kind: "respirator", label: "Respirator" },
+  { kind: "glove", label: "Gloves" },
+  { kind: "harness", label: "Harness" },
+  { kind: "boot", label: "Boots" },
+];
+
+const STATS = [
+  { value: "4000", unit: "V", label: "Arc-Flash Shielding" },
+  { value: "10k", unit: "+", label: "Suits Deployed" },
+  { value: "700", unit: "BAR", label: "Hydraulic Performance" },
+];
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-black py-20 lg:py-32">
-      {/* Decorative Grid Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.06),transparent_50%)] bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-      
-      {/* Blur Orbs */}
-      <div className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-orange-600/10 blur-[150px]"></div>
-      <div className="absolute -bottom-40 -left-40 h-[600px] w-[600px] rounded-full bg-pink-600/5 blur-[150px]"></div>
+    <section id="top" className="relative overflow-hidden border-b border-ink bg-paper">
+      <div className="mx-auto max-w-[1320px] px-4 sm:px-6">
+        {/* Sheet header row */}
+        <div className="flex items-center justify-between border-b border-rule py-4 text-ink-3">
+          <span className="eyebrow">Mining-grade specifications</span>
+          <span className="eyebrow hidden sm:inline">PPE · Hydraulics · RFQ</span>
+        </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
-          {/* Hero Headline and Text */}
-          <div className="lg:col-span-7 space-y-8 text-left">
-            <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/5 px-4 py-1.5 text-xs font-semibold text-orange-500">
-              <Zap className="h-3 w-3" />
-              <span>MINING-GRADE SPECIFICATIONS</span>
-            </div>
-
-            <h1 className="font-display text-5xl font-extrabold tracking-tight text-white sm:text-6xl md:text-7xl leading-tight">
-              GEARED FOR THE <br />
-              <span className="bg-gradient-to-r from-orange-400 via-amber-500 to-pink-500 bg-clip-text text-transparent">
-                ULTIMATE FRONTLINE
+        <div className="grid gap-12 py-12 md:py-16 lg:grid-cols-12 lg:gap-10 lg:py-20">
+          <div className="lg:col-span-8">
+            <h1 className="font-display text-[clamp(3.4rem,8.6vw,8rem)] font-extrabold uppercase leading-[0.86] tracking-[-0.01em] text-ink">
+              Geared for the
+              <span className="block">
+                <span className="relative inline-block">
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-[-0.06em] bottom-[0.08em] top-[0.52em] -z-0 bg-hivis"
+                  />
+                  <span className="relative">ultimate</span>
+                </span>
               </span>
+              <span className="block">frontline</span>
             </h1>
 
-            <p className="max-w-xl text-lg md:text-xl leading-relaxed text-zinc-400">
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-ink-2 md:text-xl">
               ROK engineers extreme-environment protective wear and high-pressure mine hydraulics. We build premium, anatomical safety suits and machinery components tailored to the toughest underground depths.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#womens-suits"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-pink-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-orange-500/25 hover:opacity-90 hover:scale-[1.02] transition-all duration-300"
+                className="group inline-flex items-center justify-between gap-6 bg-ink px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.06em] text-paper transition-colors hover:bg-ink-2"
               >
-                <span>Explore Women's Range</span>
-                <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                Explore Women&apos;s Range
+                <ArrowRight className="h-5 w-5 text-hivis transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </a>
               <a
                 href="#ppe"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-zinc-900/40 px-8 py-4 text-base font-bold text-white hover:bg-zinc-800/80 transition-colors duration-200"
+                className="inline-flex items-center justify-between gap-6 border border-ink px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.06em] text-ink transition-colors hover:bg-paper-2"
               >
-                <span>View Full Catalog</span>
-                <ArrowDown className="h-4 w-4 text-zinc-400" />
+                View Full Catalog
+                <ArrowDown className="h-5 w-5" aria-hidden="true" />
               </a>
-            </div>
-
-            {/* Micro Trust Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-10 border-t border-white/5 max-w-lg">
-              <div>
-                <p className="font-display text-3xl font-black text-white">4000V</p>
-                <p className="text-xs text-zinc-500 font-medium">Arc-Flash Shielding</p>
-              </div>
-              <div>
-                <p className="font-display text-3xl font-black text-white">10k+</p>
-                <p className="text-xs text-zinc-500 font-medium">Suits Deployed</p>
-              </div>
-              <div>
-                <p className="font-display text-3xl font-black text-white">700 BAR</p>
-                <p className="text-xs text-zinc-500 font-medium">Hydraulic Performance</p>
-              </div>
             </div>
           </div>
 
-          {/* Hero Visual Block */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-[420px] aspect-[4/5] rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 to-black p-4 shadow-2xl">
-              {/* Image simulation with high-end CSS graphics */}
-              <div className="relative h-full w-full rounded-2xl overflow-hidden bg-gradient-to-b from-zinc-800 to-zinc-950 flex flex-col justify-between p-6">
-                
-                {/* Visual HUD overlay */}
-                <div className="flex justify-between items-start">
-                  <div className="rounded-lg bg-black/50 border border-white/10 px-3 py-1.5 backdrop-blur-md">
-                    <span className="text-[10px] font-mono tracking-widest text-zinc-400 uppercase">PRODUCT SKU: R-W02</span>
-                  </div>
-                  <span className="flex h-3 w-3 rounded-full bg-pink-500 animate-ping"></span>
-                </div>
-
-                {/* Conceptual Product Image container */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40 mix-blend-color-dodge">
-                  {/* Decorative glowing mechanical/fabric wireframe */}
-                  <div className="h-64 w-64 rounded-full border-4 border-dashed border-orange-500/20 animate-spin"></div>
-                </div>
-
-                {/* Big stylized suit outline preview */}
-                <div className="my-auto flex flex-col items-center justify-center text-center space-y-4">
-                  <div className="h-20 w-20 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500 shadow-inner">
-                    <Zap className="h-8 w-8" />
-                  </div>
-                  <span className="font-display text-xs font-bold tracking-widest text-pink-400 uppercase">SIGNATURE WOMEN'S WORKSUIT</span>
-                  <p className="text-xs text-zinc-500 max-w-[200px]">Tailored ergonomic fit for female underground mine specialists.</p>
-                </div>
-
-                {/* Tagged Overlay Card */}
-                <div className="rounded-xl border border-white/5 bg-zinc-950/80 p-4 backdrop-blur-md">
-                  <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500">
-                      <ShieldAlert className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">Reinforced Protection</h4>
-                      <p className="text-[10px] text-zinc-500 font-medium">Rip-stop fire-retardant thread.</p>
-                    </div>
-                  </div>
-                </div>
-
+          {/* Site-entrance mandatory PPE sign */}
+          <div className="lg:col-span-4 lg:self-center">
+            <figure className="mx-auto max-w-[460px] border-[3px] border-ink bg-[#f7f5ef] shadow-[10px_10px_0_0_var(--color-ink)]">
+              <div className="hazard h-4 border-b-[3px] border-ink" aria-hidden="true" />
+              <div className="px-6 pb-6 pt-5 sm:px-8">
+                <p className="eyebrow text-ink-3">Mandatory</p>
+                <p className="mt-1 font-display text-[2rem] font-extrabold uppercase leading-[0.95] text-ink sm:text-[2.35rem]">
+                  Protective equipment
+                  <br />
+                  must be worn
+                </p>
+                <ul className="mt-6 grid grid-cols-3 gap-x-4 gap-y-5">
+                  {SIGN.map((s) => (
+                    <li key={s.kind} className="flex flex-col items-center gap-2">
+                      <span
+                        className="flex aspect-square w-full max-w-[96px] items-center justify-center rounded-full bg-ink text-paper"
+                        style={{ ["--cut" as string]: "var(--color-ink)" }}
+                      >
+                        <Pictogram kind={s.kind} className="h-[58%] w-[58%]" />
+                      </span>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-2">{s.label}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+              <figcaption className="flex items-center justify-between border-t-[3px] border-ink bg-ink px-6 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-paper sm:px-8">
+                <span>Built to SABS regulations</span>
+                <span className="text-hivis">ROK</span>
+              </figcaption>
+            </figure>
           </div>
         </div>
       </div>
+
+      {/* Spec strip */}
+      <div className="border-t border-ink bg-paper-2">
+        <dl className="mx-auto grid max-w-[1320px] grid-cols-3 px-4 sm:px-6">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className={`flex flex-col-reverse justify-end py-6 sm:py-8 ${i > 0 ? "border-l border-rule pl-3 sm:pl-8" : "pr-3"}`}
+            >
+              <dt className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 sm:text-[11px]">
+                {s.label}
+              </dt>
+              <dd className="font-display text-[clamp(2rem,6vw,4.25rem)] font-bold leading-none tabular-nums text-ink">
+                {s.value}
+                <span className="ml-1 text-[0.45em] font-semibold tracking-wide text-ink-3">{s.unit}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div className="hazard h-3" aria-hidden="true" />
     </section>
   );
 }
