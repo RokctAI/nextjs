@@ -4,16 +4,24 @@ import { useEffect, useState } from "react";
 
 /**
  * The floating "Back to top" button. Hidden at the top of the page, it
- * fades in once the visitor has scrolled past one screen, sits bottom right
- * clear of the device's safe-area insets, and takes the visitor back to the
- * top: smoothly, or in one jump when they prefer reduced motion ("instant",
+ * fades in once the visitor has scrolled past one screen (or half the
+ * page, on a page shorter than two screens), sits bottom right clear of
+ * the device's safe-area insets, and takes the visitor back to the top:
+ * smoothly, or in one jump when they prefer reduced motion ("instant",
  * because "auto" would follow the smooth `scroll-behavior` on <html>).
  *
- * Tloumoka blue with a white arrow (Remixicon's ri-arrow-up-line, inline),
- * deepening on hover; the gold of the crescent mark is its focus ring
- * (`outline-gold!`: the global `:focus-visible` outline in globals.css is
- * unlayered and would otherwise win over the utility). It sits under the
- * mobile menu sheet (z-50), so an open menu covers it.
+ * Tloumoka's own button (Ray, 2026-10-31: the button must not look the
+ * same on every site). The site is a product showcase in a spec-sheet
+ * voice: warm studio greys, fine linework, one considered blue, gold kept
+ * for the crescent mark, quiet motion. So the button is a minimal chevron
+ * (Remixicon's ri-arrow-up-s-line, inline) on a frosted disc of the page
+ * ground with a hairline `line-2` rule, like a callout on a technical
+ * drawing; on hover the disc fills with `brand` and the chevron turns
+ * white and nudges up. Gold is its focus ring (`outline-gold!`: the global
+ * `:focus-visible` outline in globals.css is unlayered and would otherwise
+ * win over the utility). Motion is the site's own `ease-out-quint` at
+ * 500ms, motion-safe only. It sits under the mobile menu sheet (z-50), so
+ * an open menu covers it.
  */
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -22,7 +30,9 @@ export default function BackToTop() {
     let frame = 0;
     const check = () => {
       frame = 0;
-      setVisible(window.scrollY > window.innerHeight);
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const threshold = scrollable > 0 ? Math.min(window.innerHeight, scrollable / 2) : window.innerHeight;
+      setVisible(window.scrollY > threshold);
     };
     const onScroll = () => {
       if (frame === 0) frame = window.requestAnimationFrame(check);
@@ -52,7 +62,7 @@ export default function BackToTop() {
       aria-hidden={!visible}
       tabIndex={visible ? 0 : -1}
       data-back-to-top={visible ? "shown" : "hidden"}
-      className={`group fixed z-40 grid h-12 w-12 place-items-center rounded-full bg-brand text-white shadow-[0_14px_32px_-12px_rgba(15,87,148,0.75)] ring-1 ring-white/15 [--btt-gap:1rem] hover:bg-brand-deep focus-visible:outline-gold! md:[--btt-gap:1.5rem] motion-safe:transition-[opacity,transform,background-color] motion-safe:duration-300 ${
+      className={`group fixed z-40 grid h-11 w-11 place-items-center rounded-full border border-line-2 bg-page/80 text-ink backdrop-blur-md [--btt-gap:1rem] hover:border-brand hover:bg-brand hover:text-white focus-visible:outline-gold! md:[--btt-gap:1.5rem] motion-safe:transition-[opacity,transform,background-color,border-color,color] motion-safe:duration-500 motion-safe:ease-out-quint ${
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
       }`}
       style={{
@@ -62,14 +72,14 @@ export default function BackToTop() {
     >
       <svg
         viewBox="0 0 24 24"
-        width="22"
-        height="22"
+        width="24"
+        height="24"
         fill="currentColor"
         aria-hidden="true"
         focusable="false"
-        className="motion-safe:transition-transform motion-safe:duration-300 group-hover:-translate-y-0.5"
+        className="motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out-quint group-hover:-translate-y-0.5"
       >
-        <path d="M13.0001 7.82843V20H11.0001V7.82843L5.63614 13.1924L4.22192 11.7782L12.0001 4L19.7783 11.7782L18.3641 13.1924L13.0001 7.82843Z" />
+        <path d="M11.9999 10.8284L7.0502 15.7782L5.63599 14.364L11.9999 8L18.3639 14.364L16.9497 15.7782L11.9999 10.8284Z" />
       </svg>
     </button>
   );
