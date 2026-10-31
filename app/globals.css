@@ -1,81 +1,180 @@
-/* ROK Industrial — "Spec Sheet" design system
-   Paper datasheet + shaft-dark bands, hi-vis fluorescent yellow used as a
-   material (tape, signage), never as a gradient. */
+/* Tloumoka — product-led showcase system.
+   Warm studio greys for product stages, near-black ink, one considered accent
+   (Tloumoka blue, from the logo) with gold reserved for the crescent mark. Bold grotesk headlines, generous space, quiet motion. */
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #efece4;
-  --color-paper-2: #e6e2d7;
-  --color-paper-3: #d9d4c6;
-  --color-ink: #15140f;
-  --color-ink-2: #3a3830;
-  --color-ink-3: #6b675b;
-  --color-rule: #c9c3b3;
-  --color-shaft: #121310;
-  --color-shaft-2: #1b1c18;
-  --color-shaft-3: #272822;
-  --color-steel: #a6a89f;
-  --color-hivis: #d8f02a;
-  --color-hivis-deep: #b9d10f;
-  --color-signal: #c8371f;
+  --color-page: #fafaf8;
+  --color-stage: #efeeea;
+  --color-stage-2: #e5e3de;
+  --color-line: #e2e0db;
+  --color-line-2: #cfccc5;
+  --color-ink: #111214;
+  --color-ink-2: #44464c;
+  --color-ink-3: #74767c;
+  --color-night: #0d0e11;
+  --color-night-2: #16181c;
+  --color-night-3: #23262c;
+  --color-mist: #a9adb6;
+  --color-brand: #1670b8;
+  --color-brand-deep: #0f5794;
+  --color-brand-soft: #e5eff8;
+  --color-brand-glow: #6fb3ec;
+  --color-gold: #e9b52c;
+  --color-gold-soft: #f6d77a;
 
-  --font-display: var(--font-barlow-condensed), "Arial Narrow", sans-serif;
-  --font-sans: var(--font-barlow), system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-display: var(--font-inter-tight), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-rise: rise 1s var(--ease-out-quint) both;
+  --animate-fade: fade 0.9s ease both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-sheet: sheet 0.5s var(--ease-out-quint) both;
+  --animate-pop: pop 0.45s var(--ease-out-quint) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes sheet {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--color-paper);
+  background-color: var(--color-page);
   color: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: var(--color-paper);
+  background-color: var(--color-page);
   color: var(--color-ink);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-hivis);
-  color: var(--color-ink);
+  background: var(--color-brand);
+  color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
 }
 .on-dark :focus-visible {
-  outline-color: var(--color-hivis);
+  outline-color: var(--color-brand-glow);
 }
 
 @layer components {
-  /* Yellow/black hazard chevron band (industrial signage) */
-  .hazard {
-    background-image: repeating-linear-gradient(
-      -45deg,
-      var(--color-ink) 0 14px,
-      var(--color-hivis) 14px 28px
-    );
-  }
-
-  /* Faint drafting grid for technical drawings */
-  .drafting {
-    background-color: var(--color-paper-2);
-    background-image:
-      linear-gradient(to right, rgb(21 20 15 / 0.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(21 20 15 / 0.07) 1px, transparent 1px),
-      linear-gradient(to right, rgb(21 20 15 / 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(21 20 15 / 0.035) 1px, transparent 1px);
-    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
-  }
-
   .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.032em;
+    word-spacing: 0.02em;
+    line-height: 0.95;
+  }
+
+  /* Product stage: soft studio light falling from the top left. */
+  .stage {
+    background:
+      radial-gradient(120% 90% at 30% 10%, #f8f7f4 0%, transparent 60%),
+      linear-gradient(180deg, var(--color-stage) 0%, var(--color-stage-2) 100%);
+  }
+  .stage-dark {
+    background:
+      radial-gradient(110% 90% at 50% 0%, #2a2e36 0%, transparent 62%),
+      linear-gradient(180deg, #17191d 0%, #0f1013 100%);
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--color-line-2);
+    background: #fff;
+    padding: 14px 16px;
+    font-size: 16px;
+    color: var(--color-ink);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .field::placeholder {
+    color: color-mix(in oklab, var(--color-ink-3) 75%, transparent);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-brand) 16%, transparent);
+  }
+}
+
+/* Scroll reveal: content is server-rendered visible; only after hydration
+   (html.reveal-ready) do off-screen blocks wait for the viewport. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    transition:
+      opacity 1s var(--ease-out-quint),
+      transform 1s var(--ease-out-quint);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-ready [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(32px);
   }
 }
 
@@ -87,6 +186,7 @@ body {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
