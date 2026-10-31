@@ -308,7 +308,7 @@ export function GearsRender(props: RenderProps) {
         <circle cx="150" cy="210" r="16" fill="#1f2227" />
         {[0, 1, 2, 3, 4, 5].map((i) => {
           const a = (Math.PI / 3) * i;
-          return <circle key={i} cx={150 + 30 * Math.cos(a)} cy={210 + 30 * Math.sin(a)} r="5" fill="#5f6670" />;
+          return <circle key={i} cx={+(150 + 30 * Math.cos(a)).toFixed(2)} cy={+(210 + 30 * Math.sin(a)).toFixed(2)} r="5" fill="#5f6670" />;
         })}
       </g>
       <g className="origin-[292px_134px] motion-safe:animate-[spin_14s_linear_infinite_reverse]">
@@ -512,7 +512,7 @@ export function PartsRender(props: RenderProps) {
       <circle cx="132" cy="236" r="60" fill="#2b2e33" />
       {Array.from({ length: 10 }, (_, i) => {
         const a = (Math.PI / 5) * i;
-        return <circle key={i} cx={132 + 48 * Math.cos(a)} cy={236 + 48 * Math.sin(a)} r="11" fill={url("steel")} />;
+        return <circle key={i} cx={+(132 + 48 * Math.cos(a)).toFixed(2)} cy={+(236 + 48 * Math.sin(a)).toFixed(2)} r="11" fill={url("steel")} />;
       })}
       <circle cx="132" cy="236" r="34" fill={url("steel")} />
       <circle cx="132" cy="236" r="20" fill="#1c1e22" />

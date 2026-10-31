@@ -163,6 +163,155 @@ body {
   }
 }
 
+/* Photo / cutaway reveal. --pos (0–100) is set inline by SplitReveal. */
+.split-frame .split-cut {
+  clip-path: inset(0 0 0 calc(var(--pos) * 1%));
+  transition: clip-path 0.5s var(--ease-out-quint);
+}
+.split-frame .split-seam {
+  left: calc(var(--pos) * 1%);
+  transition: left 0.5s var(--ease-out-quint);
+}
+.split-frame[data-dragging] .split-cut,
+.split-frame[data-dragging] .split-seam {
+  transition: none;
+}
+.split-frame .split-tag {
+  transition: opacity 0.3s;
+}
+.split-frame .split-tag[data-side="photo"] {
+  opacity: clamp(0, calc((var(--pos) - 14) / 8), 1);
+}
+.split-frame .split-tag[data-side="cut"] {
+  opacity: clamp(0, calc((86 - var(--pos)) / 8), 1);
+}
+.split-input:focus-visible ~ .split-seam .split-knob {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+}
+.split-knob::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1.5px solid rgb(255 255 255 / 0.9);
+  animation: split-hint 2.4s var(--ease-out-quint) 1.2s 2 both;
+  opacity: 0;
+}
+@keyframes split-hint {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+.split-label {
+  text-shadow:
+    0 0 2px #f1f0ec,
+    0 0 6px #f1f0ec,
+    0 0 10px #f1f0ec;
+}
+.split-ink * {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.split-ink .o,
+.split-ink .l,
+.split-ink .f,
+.split-ink .h,
+.split-ink .c,
+.split-ink .ph {
+  fill: none;
+  stroke: var(--color-brand);
+}
+.split-ink .o {
+  stroke-width: 1.6;
+}
+.split-ink .l {
+  stroke-width: 1;
+}
+.split-ink .f {
+  stroke-width: 0.75;
+  stroke-opacity: 0.75;
+}
+.split-ink .h {
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+  stroke-opacity: 0.8;
+}
+.split-ink .c {
+  stroke-width: 0.75;
+  stroke-dasharray: 18 4 3 4;
+  stroke-opacity: 0.55;
+}
+.split-ink .ph {
+  stroke-width: 0.9;
+  stroke-dasharray: 22 4 3 4 3 4;
+  stroke-opacity: 0.75;
+}
+.split-ink .stitch {
+  stroke-dasharray: 3 3;
+}
+.split-ink .paper {
+  fill: #fbfbf9;
+}
+.split-ink .o.paper {
+  fill: color-mix(in oklab, #fdfdfb 70%, var(--color-brand-soft));
+  fill-opacity: 0.62;
+}
+.split-ink .sec {
+  fill: var(--hatch);
+  stroke: var(--color-brand);
+  stroke-width: 1.1;
+}
+.split-ink .oil {
+  fill: var(--dots);
+}
+.split-ink .mesh {
+  fill: color-mix(in oklab, var(--color-brand) 10%, transparent);
+}
+.split-ink .tape {
+  fill: color-mix(in oklab, var(--color-brand) 14%, #fff);
+  stroke: var(--color-brand);
+  stroke-width: 1;
+}
+.split-ink .bead {
+  fill: #fff;
+  stroke: var(--color-brand);
+  stroke-width: 0.75;
+}
+.split-ink .seal {
+  fill: var(--color-gold);
+  stroke: #a77a0d;
+  stroke-width: 0.9;
+}
+.split-ink .band {
+  fill: var(--color-gold-soft);
+  stroke: #a77a0d;
+  stroke-width: 0.75;
+}
+.split-ink .seal-l {
+  fill: none;
+  stroke: #c08c0c;
+  stroke-width: 1.4;
+}
+.split-ink .strap {
+  fill: none;
+  stroke: var(--color-brand);
+  stroke-width: 5;
+  stroke-opacity: 0.85;
+}
+.split-ink .tag {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 500;
+  fill: #a77a0d;
+}
+
 /* Scroll reveal: content is server-rendered visible; only after hydration
    (html.reveal-ready) do off-screen blocks wait for the viewport. */
 @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {

@@ -6,6 +6,8 @@ import PageHero from "@/components/PageHero";
 import Render from "@/components/renders/Render";
 import WimFeature from "@/components/WimFeature";
 import PpeShowcase from "@/components/PpeShowcase";
+import SplitReveal from "@/components/split/SplitReveal";
+import { SERVICE_SPLIT, SPLITS } from "@/components/split/cutaways";
 import { ProductTile } from "@/components/Tiles";
 import { ButtonLink, Container, EnquireLink, Eyebrow, SectionHead } from "@/components/ui";
 import { BRAND, SERVICES, getService } from "@/lib/site";
@@ -54,10 +56,12 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
           </>
         }
         visual={
-          <div className="stage relative aspect-square overflow-hidden rounded-[36px] lg:aspect-[5/5.4]">
-            <p className="eyebrow absolute left-7 top-6 text-ink-3">{service.name}</p>
-            <Render kind={service.render} title={service.name} className="absolute inset-0 m-auto h-[82%] w-[82%] animate-float" />
-          </div>
+          <SplitReveal
+            {...SPLITS[SERVICE_SPLIT[service.slug]]}
+            eager
+            sizes="(min-width: 1024px) 600px, 100vw"
+            className="mx-auto w-full max-w-[600px]"
+          />
         }
       />
 

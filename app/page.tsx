@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import SuitRender from "@/components/renders/SuitRender";
-import Render from "@/components/renders/Render";
+import SplitReveal from "@/components/split/SplitReveal";
+import { SPLITS } from "@/components/split/cutaways";
 import Scene from "@/components/renders/Scenes";
 import WimFeature from "@/components/WimFeature";
 import ContactForm from "@/components/ContactForm";
@@ -45,14 +45,18 @@ function Hero() {
           </div>
         </div>
 
-        {/* Product moment */}
-        <div className="relative min-h-[520px] lg:col-span-6 lg:min-h-0">
-          <div className="absolute inset-0 flex animate-fade items-end justify-center [animation-delay:200ms]">
-            <SuitRender className="h-[96%] w-auto max-w-full drop-shadow-[0_40px_50px_rgba(17,18,20,0.22)]" />
-          </div>
-          <FloatCard className="left-0 top-[12%] sm:left-[4%]" delay="0s" kind="helmet" label="PPE supply" href="/services/ppe-supply-and-management" />
-          <FloatCard className="right-0 top-[38%] sm:right-[2%]" delay="1.4s" kind="cylinder" label="Hydraulics" href="/services/hydraulic-systems" />
-          <FloatCard className="bottom-[8%] left-[2%] hidden sm:flex" delay="2.4s" kind="spray" label="Cleaning" href="/services/cleaning-services" />
+        {/* Product moment: real photo on the left, technical cutaway on the right */}
+        <div className="relative flex flex-col items-center justify-center lg:col-span-6">
+          <SplitReveal
+            {...SPLITS.worksuit}
+            eager
+            sizes="(min-width: 1024px) 560px, (min-width: 640px) 70vw, 100vw"
+            className="w-full max-w-[min(560px,max(320px,calc((100svh-230px)*0.8)))] animate-fade [animation-delay:200ms]"
+          />
+          <p className="mt-5 flex items-center gap-3 text-[13px] text-ink-3">
+            <span className="h-px w-8 bg-line-2" aria-hidden="true" />
+            Hi-vis worksuit. Drag the handle to look inside.
+          </p>
         </div>
       </Container>
 
@@ -71,34 +75,6 @@ function Hero() {
         </Container>
       </div>
     </section>
-  );
-}
-
-function FloatCard({
-  className,
-  delay,
-  kind,
-  label,
-  href,
-}: {
-  className: string;
-  delay: string;
-  kind: "helmet" | "cylinder" | "spray";
-  label: string;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`group absolute z-10 flex animate-float items-center gap-3 rounded-[20px] bg-white/90 py-2 pl-2 pr-4 shadow-[0_20px_40px_-20px_rgba(17,18,20,0.35)] backdrop-blur transition-colors hover:bg-white ${className}`}
-      style={{ animationDelay: delay }}
-    >
-      <span className="stage flex h-14 w-14 items-center justify-center overflow-hidden rounded-[14px]">
-        <Render kind={kind} title={label} className="h-[112%] w-[112%] shrink-0" />
-      </span>
-      <span className="text-[14px] font-semibold text-ink">{label}</span>
-      <ArrowRight className="h-4 w-4 text-ink-3 transition-transform group-hover:translate-x-0.5 group-hover:text-ink" aria-hidden="true" />
-    </Link>
   );
 }
 
