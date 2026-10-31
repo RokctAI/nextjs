@@ -4,6 +4,7 @@ import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import RevealObserver from "@/components/RevealObserver";
+import BackToTop from "@/components/BackToTop";
 import { BRAND, LEGAL_ENTITY } from "@/lib/site";
 
 const interTight = Inter_Tight({
@@ -84,6 +85,7 @@ export default function RootLayout({
         </main>
         <SiteFooter />
         <RevealObserver />
+        <BackToTop />
       </body>
     </html>
   );
