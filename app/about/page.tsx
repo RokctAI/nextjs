@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
-import { Monogram } from "@/components/Logo";
+import Logo from "@/components/Logo";
 import { ButtonLink, Container, Eyebrow, SectionHead } from "@/components/ui";
 import { BRAND, COMMUNITY, FOUNDED, LEGAL_ENTITY, LEGAL_NAME, MISSION, OBJECTIVES, VALUES, VISION, WHY_US } from "@/lib/site";
 
@@ -33,7 +33,7 @@ export default function AboutPage() {
         <Container className="grid gap-12 lg:grid-cols-12">
           <div data-reveal className="lg:col-span-5">
             <div className="stage relative flex aspect-square items-center justify-center overflow-hidden rounded-[36px]">
-              <Monogram className="h-[46%] w-[46%] drop-shadow-[0_30px_40px_rgba(17,18,20,0.15)]" />
+              <Logo size="xl" className="drop-shadow-[0_30px_40px_rgba(17,18,20,0.12)]" />
               <span className="absolute bottom-6 left-7 text-[13px] text-ink-3">Est. {FOUNDED}</span>
             </div>
           </div>

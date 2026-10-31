@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useCallback, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 export interface Callout {
   /** Anchor point on the drawing, in the photo's pixel space. */
@@ -27,6 +27,33 @@ interface Props {
 
 const clamp = (n: number) => Math.min(100, Math.max(0, n));
 
+/** Demo sweep keyframes: [time 0–1, position]. 50 → 38 → 62 → 50. */
+const SWEEP: [number, number][] = [
+  [0, 50],
+  [0.28, 38],
+  [0.72, 62],
+  [1, 50],
+];
+const SWEEP_MS = 1600;
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+function sweepAt(t: number) {
+  for (let i = 1; i < SWEEP.length; i++) {
+    const [t1, p1] = SWEEP[i];
+    const [t0, p0] = SWEEP[i - 1];
+    if (t <= t1) return p0 + (p1 - p0) * easeInOut((t - t0) / (t1 - t0));
+  }
+  return SWEEP[SWEEP.length - 1][1];
+}
+
+/** Remixicon "arrow-left-right-line", inlined. */
+function ArrowsIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M16.05 12.05 21 17l-4.95 4.95-1.414-1.414L17.172 18H4v-2h13.172l-2.536-2.536 1.414-1.414Zm-8.1-10 1.414 1.414L6.828 6H20v2H6.828l2.536 2.536L7.95 11.95 3 7l4.95-4.95Z" />
+    </svg>
+  );
+}
+
 /**
  * Photo / cutaway reveal. A real photograph on the left, the same object as a
  * technical cutaway on the right, split by a handle the visitor can drag.
@@ -36,6 +63,11 @@ const clamp = (n: number) => Math.min(100, Math.max(0, n));
 export default function SplitReveal({ photo, alt, drawingLabel, drawing, callouts, sizes, eager, className = "" }: Props) {
   const [pos, setPos] = useState(50);
   const [dragging, setDragging] = useState(false);
+  // The visitor has moved the slider themselves: the "Drag" hint fades out.
+  const [moved, setMoved] = useState(false);
+  // The one-off demo sweep is running.
+  const [demo, setDemo] = useState(false);
+  const demoRaf = useRef(0);
   const frame = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const uid = useId().replace(/:/g, "");
@@ -46,6 +78,60 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
   const end = useCallback(() => {
     gesture.current = null;
     setDragging(false);
+  }, []);
+
+  const stopDemo = useCallback(() => {
+    if (demoRaf.current) cancelAnimationFrame(demoRaf.current);
+    demoRaf.current = 0;
+    setDemo(false);
+  }, []);
+
+  const touched = useCallback(() => {
+    stopDemo();
+    setMoved(true);
+  }, [stopDemo]);
+
+  // When the split first scrolls into view, sweep the handle once to show it
+  // moves. Skipped under prefers-reduced-motion (the static label stays).
+  useEffect(() => {
+    const el = frame.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let started = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (started || !entries.some((e) => e.isIntersecting)) return;
+        started = true;
+        io.disconnect();
+        let t0 = 0;
+        const step = (now: number) => {
+          if (!t0) t0 = now;
+          const t = Math.min(1, (now - t0) / SWEEP_MS);
+          setPos(Math.round(sweepAt(t) * 10) / 10);
+          if (t < 1) demoRaf.current = requestAnimationFrame(step);
+          else {
+            demoRaf.current = 0;
+            setDemo(false);
+          }
+        };
+        // Short pause so the frame has settled into view before it moves.
+        demoRaf.current = requestAnimationFrame(() => {
+          setDemo(true);
+          const wait = performance.now() + 450;
+          const hold = (now: number) => {
+            if (now < wait) demoRaf.current = requestAnimationFrame(hold);
+            else demoRaf.current = requestAnimationFrame(step);
+          };
+          demoRaf.current = requestAnimationFrame(hold);
+        });
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      if (demoRaf.current) cancelAnimationFrame(demoRaf.current);
+    };
   }, []);
 
   const fromClientX = useCallback((clientX: number) => {
@@ -60,6 +146,8 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
         ref={frame}
         data-split=""
         data-dragging={dragging ? "" : undefined}
+        data-demo={demo ? "" : undefined}
+        data-moved={moved ? "" : undefined}
         className="split-frame group/split relative isolate cursor-ew-resize touch-pan-y select-none overflow-hidden rounded-[32px] bg-stage shadow-[0_40px_80px_-48px_rgba(17,18,20,0.45)] ring-1 ring-black/5"
         style={{ aspectRatio: `${W} / ${H}`, ["--pos" as string]: pos }}
         onPointerDown={(e) => {
@@ -70,6 +158,7 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
             e.preventDefault();
             e.currentTarget.setPointerCapture(e.pointerId);
             setDragging(true);
+            touched();
             fromClientX(e.clientX);
             input.current?.focus({ preventScroll: true });
           }
@@ -86,6 +175,7 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
             g.live = true;
             e.currentTarget.setPointerCapture(e.pointerId);
             setDragging(true);
+            touched();
           }
           fromClientX(e.clientX);
         }}
@@ -168,7 +258,7 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
           Photo
         </span>
         <span className="split-tag pointer-events-none absolute right-4 top-4 rounded-full bg-brand px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-white shadow-sm sm:right-5 sm:top-5" data-side="cut">
-          Cutaway
+          Inside
         </span>
 
         {/* Accessible control: keyboard, screen readers. Pointer input is handled by the frame. */}
@@ -179,7 +269,10 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
           max={100}
           step={1}
           value={Math.round(pos)}
-          onChange={(e) => setPos(clamp(Number(e.target.value)))}
+          onChange={(e) => {
+            touched();
+            setPos(clamp(Number(e.target.value)));
+          }}
           aria-label={`Compare photo and cutaway: ${drawingLabel}`}
           aria-valuetext={`${Math.round(pos)}% photo, ${100 - Math.round(pos)}% cutaway`}
           className="split-input pointer-events-none absolute inset-0 h-full w-full cursor-ew-resize appearance-none bg-transparent opacity-0"
@@ -187,10 +280,12 @@ export default function SplitReveal({ photo, alt, drawingLabel, drawing, callout
 
         {/* Seam and handle */}
         <div className="split-seam pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-white shadow-[0_0_0_0.5px_rgba(15,87,148,0.35)]" aria-hidden="true">
-          <span className="split-knob absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-brand-deep shadow-[0_10px_28px_-8px_rgba(17,18,20,0.45)] ring-1 ring-black/5 transition-transform duration-300 group-data-[dragging]/split:scale-90">
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 6l-6 6 6 6M15 6l6 6-6 6" />
-            </svg>
+          <span className="split-knob absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-brand-deep shadow-[0_12px_30px_-8px_rgba(17,18,20,0.5)] ring-1 ring-black/5">
+            <ArrowsIcon className="h-6 w-6" />
+          </span>
+          <span className="split-hint absolute left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-brand-deep px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-white shadow-[0_6px_16px_-6px_rgba(15,87,148,0.7)] ring-1 ring-white/25">
+            <span className="h-1 w-1 rounded-full bg-gold" />
+            Drag
           </span>
         </div>
       </div>

@@ -4,10 +4,13 @@ interface LogoProps {
   tone?: "ink" | "light";
   className?: string;
   showLegal?: boolean;
+  /** "xl" sets the wordmark large, for feature tiles. */
+  size?: "md" | "xl";
 }
 
 /** Monogram: a T whose stem becomes the first stroke of an M, cradled by the
-    gold crescent from the client's mark. Redrawn as clean geometry. */
+    gold crescent from the client's mark. Used only as a large, faint background
+    watermark in feature sections, never beside the wordmark. */
 export function Monogram({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
@@ -19,16 +22,19 @@ export function Monogram({ className = "" }: { className?: string }) {
 }
 
 /** Wordmark: tight, confident grotesk with the "ou" pair set in brand blue
-    and the crescent swept underneath, echoing the monogram. */
-export default function Logo({ tone = "ink", className = "", showLegal = false }: LogoProps) {
+    and the gold crescent from the client's mark swept underneath. The
+    wordmark stands alone; there is no separate icon. */
+export default function Logo({ tone = "ink", className = "", showLegal = false, size = "md" }: LogoProps) {
+  const xl = size === "xl";
   const fg = tone === "ink" ? "text-ink" : "text-white";
   const lower = BRAND.toLowerCase();
   const split = lower.indexOf("ou");
   return (
-    <span className={`inline-flex items-center gap-2.5 ${fg} ${className}`}>
-      <Monogram className="h-9 w-9 shrink-0" />
+    <span className={`inline-flex items-center ${fg} ${className}`}>
       <span className="flex flex-col leading-none" aria-hidden="true">
-        <span className="relative font-display text-[23px] font-extrabold tracking-[-0.045em]">
+        <span
+          className={`relative font-display font-extrabold tracking-[-0.045em] ${xl ? "text-[clamp(3rem,7vw,5.25rem)]" : "text-[25px]"}`}
+        >
           {split > 0 ? (
             <>
               {lower.slice(0, split)}
@@ -41,7 +47,7 @@ export default function Logo({ tone = "ink", className = "", showLegal = false }
           <svg
             viewBox="0 0 100 8"
             preserveAspectRatio="none"
-            className="absolute -bottom-[5px] left-[2%] h-[5px] w-[96%]"
+            className={`absolute left-[2%] w-[96%] ${xl ? "-bottom-[0.2em] h-[0.2em]" : "-bottom-[5px] h-[5px]"}`}
             aria-hidden="true"
           >
             <path d="M0 1 C25 9 75 9 100 1 C75 5.5 25 5.5 0 1 Z" fill="var(--color-gold)" />

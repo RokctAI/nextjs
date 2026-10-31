@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import SuitRender, { SUIT_H, SUIT_W, type SuitFeature } from "@/components/renders/SuitRender";
+import { Monogram } from "@/components/Logo";
 import { Container, EnquireLink, Eyebrow } from "@/components/ui";
 import { WIM_SUIT } from "@/lib/site";
 
@@ -20,6 +21,8 @@ export default function WimFeature() {
         }}
         aria-hidden="true"
       />
+      {/* Brand mark as a large, faint watermark */}
+      <Monogram className="pointer-events-none absolute -right-[18%] bottom-[3%] h-[min(86vw,720px)] w-[min(86vw,720px)] select-none opacity-[0.07] lg:-right-[4%] lg:-bottom-[12%]" />
       <Container className="relative grid gap-12 py-20 md:py-28 lg:grid-cols-12 lg:gap-10">
         {/* Product stage */}
         <div data-reveal className="relative lg:col-span-7">
