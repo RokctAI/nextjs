@@ -1,201 +1,251 @@
-"use client";
-
-import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import WomensWorksuits from "@/components/WomensWorksuits";
-import PpeGrid from "@/components/PpeGrid";
-import Hydraulics from "@/components/Hydraulics";
-import QuoteDrawer from "@/components/QuoteDrawer";
-import { Shield, Sparkles, Hammer, CheckCircle, Mail, Phone, MapPin, ExternalLink, Globe } from "lucide-react";
-
-interface CartItem {
-  id: string;
-  name: string;
-  category: string;
-  price: string;
-  quantity: number;
-}
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import SplitReveal from "@/components/split/SplitReveal";
+import { SPLITS } from "@/components/split/cutaways";
+import Scene from "@/components/renders/Scenes";
+import WimFeature from "@/components/WimFeature";
+import ContactForm from "@/components/ContactForm";
+import { ServiceTile } from "@/components/Tiles";
+import { ButtonLink, Container, Eyebrow, SectionHead } from "@/components/ui";
+import { CONTACT, FOUNDED, INDUSTRIES, LEGAL_NAME, SERVICES, WHY_US } from "@/lib/site";
 
 export default function Home() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
-  const handleAddItem = (item: { id: string; name: string; category: string; price: string }) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((i) => i.id === item.id);
-      if (existing) {
-        return prevCart.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 10 } : i
-        );
-      }
-      // If the item doesn't have an application-based price, start with 50 units (standard bulk)
-      const defaultQty = item.price === "Quote on Application" ? 1 : 50;
-      return [...prevCart, { ...item, quantity: defaultQty }];
-    });
-  };
-
-  const handleRemoveItem = (id: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  const handleUpdateQty = (id: string, qty: number) => {
-    setCart((prevCart) =>
-      prevCart.map((item) => (item.id === id ? { ...item, quantity: qty } : item))
-    );
-  };
-
-  const handleClearCart = () => {
-    setCart([]);
-  };
-
-  const totalItemsCount = cart.reduce((acc, item) => acc + (item.price === "Quote on Application" ? 1 : item.quantity), 0);
-
   return (
-    <div className="min-h-screen bg-[#050505] text-[#fafafa] flex flex-col justify-between selection:bg-orange-500 selection:text-white">
-      {/* Navigation */}
-      <Navbar cartCount={totalItemsCount} onOpenCart={() => setIsCartOpen(true)} />
+    <>
+      <Hero />
+      <Intro />
+      <ServicesOverview />
+      <WimFeature />
+      <IndustriesTeaser />
+      <PartnersBand />
+      <QuickContact />
+    </>
+  );
+}
 
-      {/* Main Page Layout */}
-      <main className="flex-1">
-        
-        {/* 1. Hero Block */}
-        <Hero />
-
-        {/* 2. Signature Product Focus: Women's Tailored Safety Worksuits (Flagship Range) */}
-        <WomensWorksuits onAddProduct={handleAddItem} />
-
-        {/* 3. Mid-Page Technical Feature Callout Banner */}
-        <section className="bg-black py-16 border-b border-white/5 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(249,115,22,0.02),transparent_50%)]"></div>
-          <div className="mx-auto max-w-7xl px-6 relative">
-            <div className="rounded-2xl border border-white/5 bg-gradient-to-r from-zinc-950 via-zinc-900/50 to-zinc-950 p-8 md:p-12 text-center">
-              <div className="grid gap-8 md:grid-cols-3">
-                <div className="space-y-2 text-left md:text-center">
-                  <div className="mx-auto md:mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-500 mb-3">
-                    <Shield className="h-5 w-5" />
-                  </div>
-                  <h4 className="font-display text-sm font-extrabold text-white uppercase tracking-wider">SABS & CE Safety Certified</h4>
-                  <p className="text-xs text-zinc-500">Every fabric, stitch, and steel component matches strict SANS regulations for harsh conditions.</p>
-                </div>
-
-                <div className="space-y-2 text-left md:text-center border-t md:border-t-0 md:border-x border-white/5 pt-8 md:pt-0">
-                  <div className="mx-auto md:mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-400 mb-3">
-                    <Sparkles className="h-5 w-5" />
-                  </div>
-                  <h4 className="font-display text-sm font-extrabold text-white uppercase tracking-wider">Anatomical Gender-Fit</h4>
-                  <p className="text-xs text-zinc-500">Eliminating ill-fitting gear to prevent work-site accidents and dynamic mobility issues.</p>
-                </div>
-
-                <div className="space-y-2 text-left md:text-center border-t md:border-t-0 pt-8 md:pt-0">
-                  <div className="mx-auto md:mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 mb-3">
-                    <Hammer className="h-5 w-5" />
-                  </div>
-                  <h4 className="font-display text-sm font-extrabold text-white uppercase tracking-wider">700 BAR Tested System</h4>
-                  <p className="text-xs text-zinc-500">Advanced mine cylinders honed and quality-checked under absolute max hydraulic threshold.</p>
-                </div>
-              </div>
-            </div>
+function Hero() {
+  return (
+    <section className="relative overflow-hidden">
+      <div className="stage hero-stage absolute inset-x-0 bottom-0 top-0 lg:left-[50%] lg:rounded-bl-[48px]" aria-hidden="true" />
+      <Container className="relative grid min-h-[calc(100svh-72px)] gap-10 pb-12 pt-10 lg:grid-cols-12 lg:gap-6 lg:pb-16 lg:pt-16">
+        <div className="flex flex-col justify-center lg:col-span-6">
+          <Eyebrow className="animate-rise text-brand">100% black woman-owned · Est. {FOUNDED}</Eyebrow>
+          <h1 className="display mt-6 animate-rise text-[clamp(3rem,5.2vw,5.4rem)] text-ink [animation-delay:80ms]">
+            Built for the people who keep industry moving.
+          </h1>
+          <p className="mt-8 max-w-[34rem] animate-rise text-[18px] leading-relaxed text-ink-2 [animation-delay:160ms] md:text-[19px]">
+            PPE supply and management, hydraulic systems, plant maintenance, machine rebuilding and cleaning services for
+            mining, agriculture and government.
+          </p>
+          <div className="mt-10 flex animate-rise flex-wrap gap-3 [animation-delay:240ms]">
+            <ButtonLink href="/services">Explore services</ButtonLink>
+            <ButtonLink href="/contact#enquiry" variant="outline">
+              Request a quote
+            </ButtonLink>
           </div>
-        </section>
+        </div>
 
-        {/* 4. Full PPE Catalog Grid (Products First) */}
-        <PpeGrid onAddProduct={handleAddItem} />
+        {/* Product moment: real photo on the left, technical cutaway on the right */}
+        <div className="relative flex flex-col items-center justify-center lg:col-span-6">
+          <SplitReveal
+            {...SPLITS.worksuit}
+            eager
+            sizes="(min-width: 1024px) 560px, (min-width: 640px) 70vw, 100vw"
+            className="w-full max-w-[min(560px,max(320px,calc((100svh-230px)*0.8)))] animate-fade [animation-delay:200ms]"
+          />
+          <p className="mt-5 flex items-center gap-3 text-[13px] text-ink-3">
+            <span className="h-px w-8 bg-line-2" aria-hidden="true" />
+            Hi-vis worksuit. Drag the handle to look inside.
+          </p>
+        </div>
+      </Container>
 
-        {/* 5. Mine Hydraulics Engineering solutions (Services Later) */}
-        <Hydraulics onAddService={handleAddItem} />
-
-      </main>
-
-      {/* Global Product RFQ Slide-Over Drawer */}
-      <QuoteDrawer
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        items={cart}
-        onRemoveItem={handleRemoveItem}
-        onUpdateQty={handleUpdateQty}
-        onClearCart={handleClearCart}
-      />
-
-      {/* Footer (Product-Focused, Premium layout) */}
-      <footer className="border-t border-white/5 bg-black py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(255,255,255,0.01),transparent_50%)]"></div>
-        <div className="mx-auto max-w-7xl px-6 relative">
-          <div className="grid gap-10 md:grid-cols-4 border-b border-white/5 pb-12 mb-12">
-            
-            {/* Branding Column */}
-            <div className="space-y-4">
-              <a href="#" className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 shadow-md">
-                  <span className="font-display text-lg font-black text-white">R</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-display text-xl font-black tracking-widest text-white">ROK</span>
-                  <span className="text-[8px] font-bold tracking-widest text-orange-500 uppercase">Industrial</span>
-                </div>
-              </a>
-              <p className="text-[11px] text-zinc-500 leading-relaxed max-w-xs">
-                ROK is a registered manufacturer and service provider of heavy-duty industrial mining equipment, certified PPE wear, and hydraulic automation rigs.
-              </p>
+      <div className="relative border-y border-line bg-page">
+        <Container className="grid grid-cols-1 divide-y divide-line sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {[
+            ["100%", "Black woman-owned"],
+            [String(FOUNDED), "Established"],
+            ["3", "Sectors: mining, agriculture, government"],
+          ].map(([v, l]) => (
+            <div key={l} className="flex items-baseline gap-4 py-6 sm:flex-col sm:gap-1 sm:px-8 sm:py-8 sm:first:pl-0">
+              <span className="display text-[44px] text-ink">{v}</span>
+              <span className="text-[15px] text-ink-2">{l}</span>
             </div>
+          ))}
+        </Container>
+      </div>
+    </section>
+  );
+}
 
-            {/* Catalog Links */}
-            <div className="space-y-3 text-left">
-              <h4 className="font-display text-xs font-black tracking-widest text-white uppercase">PPE Catalog</h4>
-              <ul className="space-y-2 text-xs text-zinc-500 font-medium">
-                <li><a href="#womens-suits" className="hover:text-white transition-colors">Women's Worksuits Range</a></li>
-                <li><a href="#ppe" className="hover:text-white transition-colors">Full-Body Fall Harnesses</a></li>
-                <li><a href="#ppe" className="hover:text-white transition-colors">SABS Steel-Toe Boots</a></li>
-                <li><a href="#ppe" className="hover:text-white transition-colors">Arc-Flash Mine Helmets</a></li>
-              </ul>
-            </div>
-
-            {/* Engineering Links */}
-            <div className="space-y-3 text-left">
-              <h4 className="font-display text-xs font-black tracking-widest text-white uppercase">Hydraulics</h4>
-              <ul className="space-y-2 text-xs text-zinc-500 font-medium">
-                <li><a href="#hydraulics" className="hover:text-white transition-colors">Excavator Cylinder Reman</a></li>
-                <li><a href="#hydraulics" className="hover:text-white transition-colors">Field Contamination Audits</a></li>
-                <li><a href="#hydraulics" className="hover:text-white transition-colors">Custom High-Pressure Crimping</a></li>
-                <li><a href="#hydraulics" className="hover:text-white transition-colors">Emergency Fluid Purges</a></li>
-              </ul>
-            </div>
-
-            {/* Enterprise Support Column */}
-            <div className="space-y-4 text-left">
-              <h4 className="font-display text-xs font-black tracking-widest text-white uppercase">Mine Operations</h4>
-              <div className="space-y-2.5 text-xs text-zinc-500 font-medium">
-                <div className="flex items-center gap-2">
-                  <Phone className="h-3.5 w-3.5 text-orange-500 shrink-0" />
-                  <span>+27 (0) 11 405 ROKT</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Mail className="h-3.5 w-3.5 text-orange-500 shrink-0" />
-                  <span>ops@rokct.io</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-3.5 w-3.5 text-orange-500 shrink-0" />
-                  <span>Industria West, Johannesburg, South Africa</span>
-                </div>
-              </div>
-            </div>
-
+function Intro() {
+  return (
+    <section className="py-24 md:py-36">
+      <Container>
+        <div className="grid gap-12 lg:grid-cols-12">
+          <div data-reveal className="lg:col-span-4">
+            <Eyebrow className="text-brand">Who we are</Eyebrow>
           </div>
-
-          {/* Sub-Footer */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-zinc-600">
-            <p>© {new Date().getFullYear()} ROK INDUSTRIAL. ALL RIGHTS RESERVED.</p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-zinc-400 transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-zinc-400 transition-colors">SABS Certifications</a>
-              <a href="#" className="hover:text-zinc-400 transition-colors flex items-center gap-1">
-                <span>Verification Gateway</span>
-                <ExternalLink className="h-2.5 w-2.5" />
-              </a>
+          <div className="lg:col-span-8">
+            <p data-reveal className="display text-[clamp(1.9rem,3.6vw,3.25rem)] leading-[1.08] tracking-[-0.035em] text-ink">
+              {LEGAL_NAME} was founded in {FOUNDED} by a seasoned industry professional who left her employer to build her
+              own business, <span className="text-ink-3">and to make room for women in a sector built around men.</span>
+            </p>
+            <div className="mt-10" data-reveal>
+              <ButtonLink href="/about" variant="outline">
+                Our story
+              </ButtonLink>
             </div>
           </div>
         </div>
-      </footer>
-    </div>
+
+        <ul className="mt-20 grid gap-px overflow-hidden rounded-[28px] bg-line sm:grid-cols-2 lg:grid-cols-5">
+          {WHY_US.map((w, i) => (
+            <li
+              key={w.title}
+              data-reveal
+              style={{ ["--reveal-delay" as string]: `${i * 70}ms` }}
+              className="bg-page p-7 transition-colors duration-300 hover:bg-white"
+            >
+              <span className="text-[13px] tabular-nums text-brand">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="mt-6 text-[18px] font-semibold tracking-[-0.015em] text-ink">{w.title}</h3>
+              <p className="mt-3 text-[14.5px] leading-relaxed text-ink-2">{w.body}</p>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  );
+}
+
+function ServicesOverview() {
+  const [first, ...rest] = SERVICES;
+  return (
+    <section className="bg-stage/50 py-24 md:py-32">
+      <Container>
+        <SectionHead
+          eyebrow="Services"
+          title={
+            <>
+              Five services.
+              <br />
+              One accountable partner.
+            </>
+          }
+          intro="Every service is tailored to the site, the team and the job, whether that's PPE for a specific industry or a cleaning plan for your environment."
+          action={<ButtonLink href="/services" variant="outline">All services</ButtonLink>}
+        />
+        <div className="mt-14 grid gap-5 lg:grid-cols-3 lg:grid-rows-2">
+          <div data-reveal className="lg:row-span-2">
+            <ServiceTile service={first} large index={1} />
+          </div>
+          {rest.map((s, i) => (
+            <div key={s.slug} data-reveal style={{ ["--reveal-delay" as string]: `${(i + 1) * 80}ms` }}>
+              <ServiceTile service={s} index={i + 2} />
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function IndustriesTeaser() {
+  return (
+    <section className="py-24 md:py-32">
+      <Container>
+        <SectionHead
+          eyebrow="Industries served"
+          title="Where we work."
+          intro="Our experience in mining, agriculture and government gives us a deep understanding of the challenges and safety requirements of each sector."
+          action={<ButtonLink href="/industries" variant="outline">Industries</ButtonLink>}
+        />
+        <ul className="mt-14 grid gap-5 md:grid-cols-3">
+          {INDUSTRIES.map((ind, i) => (
+            <li key={ind.id} data-reveal style={{ ["--reveal-delay" as string]: `${i * 90}ms` }}>
+              <Link href={`/industries#${ind.id}`} className="group block">
+                <div className="overflow-hidden rounded-[24px]">
+                  <Scene kind={ind.scene} className="aspect-[4/3] w-full transition-transform duration-[1200ms] ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
+                </div>
+                <div className="flex items-start justify-between gap-4 pt-5">
+                  <div>
+                    <h3 className="display text-[30px] text-ink">{ind.name}</h3>
+                    <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{ind.lede}</p>
+                  </div>
+                  <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-2 transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-white">
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  );
+}
+
+function PartnersBand() {
+  return (
+    <section aria-labelledby="partners-title" className="border-y border-line py-16">
+      <Container className="grid items-center gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <Eyebrow className="text-ink-3">Clients and partners</Eyebrow>
+          <h2 id="partners-title" className="mt-3 text-[20px] font-semibold tracking-[-0.015em] text-ink">
+            Serving local mining companies, agricultural businesses and government agencies.
+          </h2>
+        </div>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:col-span-8 lg:grid-cols-5" aria-label="Partner logos coming soon">
+          {Array.from({ length: 5 }, (_, i) => (
+            <li
+              key={i}
+              className="flex h-20 items-center justify-center rounded-[18px] border border-dashed border-line-2 text-[12px] font-medium uppercase tracking-[0.14em] text-ink-3/70"
+            >
+              Logo
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  );
+}
+
+function QuickContact() {
+  return (
+    <section className="bg-stage/50 py-24 md:py-32">
+      <Container className="grid gap-12 lg:grid-cols-12">
+        <div data-reveal className="lg:col-span-5">
+          <Eyebrow className="text-brand">Quick enquiry</Eyebrow>
+          <h2 className="display mt-4 text-[clamp(2.4rem,5vw,4.4rem)] text-ink">Tell us what your site needs.</h2>
+          <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink-2">
+            Send a short note and we&apos;ll come back to you with a tailored solution. For larger requirements, use the
+            full form on our contact page.
+          </p>
+          <dl className="mt-10 space-y-5 text-[15px]">
+            <div>
+              <dt className="text-ink-3">Email</dt>
+              <dd className="mt-1">
+                <a href={`mailto:${CONTACT.email}`} className="text-[20px] font-semibold text-ink hover:text-brand">
+                  {CONTACT.email}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-ink-3">Phone</dt>
+              <dd className="mt-1 flex flex-wrap gap-x-5 text-[20px] font-semibold text-ink">
+                {CONTACT.phones.map((p) => (
+                  <a key={p.href} href={p.href} className="hover:text-brand">
+                    {p.display}
+                  </a>
+                ))}
+              </dd>
+            </div>
+          </dl>
+        </div>
+        <div data-reveal className="lg:col-span-7" style={{ ["--reveal-delay" as string]: "120ms" }}>
+          <ContactForm variant="quick" />
+        </div>
+      </Container>
+    </section>
   );
 }

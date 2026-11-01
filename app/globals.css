@@ -1,113 +1,491 @@
-/* ROK Global Design System & Variables */
+/* Tloumoka — product-led showcase system.
+   Warm studio greys for product stages, near-black ink, one considered accent
+   (Tloumoka blue, from the logo) with gold reserved for the crescent mark. Bold grotesk headlines, generous space, quiet motion. */
 @import "tailwindcss";
 
-:root {
-  /* HSL Color Palette */
-  --bg-deep: 0 0% 5%;          /* #0d0d0d */
-  --bg-card: 0 0% 9%;          /* #171717 */
-  --bg-panel: 0 0% 13%;        /* #212121 */
-  
-  --primary: 24 100% 50%;      /* Safety Orange/Amber */
-  --primary-glow: 24 100% 50% / 0.15;
-  --primary-hover: 24 100% 45%;
-  
-  --accent-gold: 43 100% 52%;  /* High Vis Gold */
-  --accent-steel: 215 15% 75%; /* Steel Grey */
-  --accent-cyan: 180 100% 45%;  /* Electric Mine Teal/Cyan */
-  
-  --text-primary: 0 0% 98%;    /* Off-white */
-  --text-secondary: 0 0% 70%;  /* Muted Grey */
-  --text-muted: 0 0% 50%;      /* Dimmed Grey */
-  
-  --border-subtle: 0 0% 16%;
-  --border-active: 24 100% 50% / 0.4;
-  
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
+/* Dark mode follows the `dark` class next-themes writes on <html> (the fleet
+   pattern), not the media query, so the header toggle can override the OS. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+@theme {
+  --color-page: #fafaf8;
+  --color-stage: #efeeea;
+  --color-stage-2: #e5e3de;
+  --color-line: #e2e0db;
+  --color-line-2: #cfccc5;
+  --color-ink: #111214;
+  --color-ink-2: #44464c;
+  --color-ink-3: #74767c;
+  --color-night: #0d0e11;
+  --color-night-2: #16181c;
+  --color-night-3: #23262c;
+  --color-mist: #a9adb6;
+  --color-brand: #1670b8;
+  --color-brand-deep: #0f5794;
+  --color-brand-soft: #e5eff8;
+  --color-brand-glow: #6fb3ec;
+  --color-gold: #e9b52c;
+  --color-gold-soft: #f6d77a;
+
+  --font-display: var(--font-inter-tight), "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-rise: rise 1s var(--ease-out-quint) both;
+  --animate-fade: fade 0.9s ease both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-sheet: sheet 0.5s var(--ease-out-quint) both;
+  --animate-pop: pop 0.45s var(--ease-out-quint) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes sheet {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Night studio: Tloumoka's dark theme, on the same tokens.
+   Deep ink-navy grounds that step up as surfaces rise (page < band < card),
+   cool off-white ink, and the brand blue lifted to #4c9be0 so it reads as text
+   (6.4:1 on the page, 5.4:1 on a card). `white`, the card and on-colour token,
+   becomes the raised navy: cards lift off the page, and type set "white" on
+   an ink or blue button reads navy on light (14.3:1 and 5.4:1). Every text
+   pairing clears WCAG AA. */
+.dark {
+  color-scheme: dark;
+  --color-page: #0b1018;
+  --color-stage: #121a26;
+  --color-stage-2: #1a2433;
+  --color-line: #222d3d;
+  --color-line-2: #34425a;
+  --color-ink: #eef1f6;
+  --color-ink-2: #b9c2d0;
+  --color-ink-3: #8d98aa;
+  --color-night: #05080d;
+  --color-night-2: #0f1622;
+  --color-night-3: #1d2635;
+  --color-mist: #a9b3c3;
+  --color-brand: #4c9be0;
+  --color-brand-deep: #2f7fc6;
+  --color-brand-soft: #14263d;
+  --color-white: #172131;
+}
+
+/* Light islands inside the dark theme: the product stages and drawings (so
+   the imagery is exactly as lit in light mode), the sections and panels that
+   are dark in both themes (`on-dark`, `ink-slab`), and anything marked
+   `keep-light`. They get the light token set back. */
+.dark :is(.stage, .keep-light, .on-dark, .ink-slab) {
+  --color-page: #fafaf8;
+  --color-stage: #efeeea;
+  --color-stage-2: #e5e3de;
+  --color-line: #e2e0db;
+  --color-line-2: #cfccc5;
+  --color-ink: #111214;
+  --color-ink-2: #44464c;
+  --color-ink-3: #74767c;
+  --color-brand: #1670b8;
+  --color-brand-deep: #0f5794;
+  --color-brand-soft: #e5eff8;
+  --color-white: #fff;
+}
+.dark :is(.stage, .keep-light) {
+  color-scheme: light;
+}
+/* The ink panels (contact details, "how we address it", ...) sit on the
+   night surface in dark mode, with a hairline to lift them off the page. */
+.dark .ink-slab {
+  background-color: var(--color-night-2);
+  box-shadow: inset 0 0 0 1px var(--color-night-3);
+}
+/* The home hero's backdrop panel goes to a night stage; the product inside
+   it keeps its own lit frame. */
+.dark .hero-stage {
+  background:
+    radial-gradient(110% 90% at 30% 0%, #1b2638 0%, transparent 62%),
+    linear-gradient(180deg, #121a27 0%, #0d131d 100%);
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: hsl(var(--bg-deep));
-  color: hsl(var(--text-primary));
+  background-color: var(--color-page);
+  color: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
+  background-color: var(--color-page);
+  color: var(--color-ink);
   font-family: var(--font-sans);
-  background-color: hsl(var(--bg-deep));
-  color: hsl(var(--text-primary));
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+::selection {
+  background: var(--color-brand);
+  color: #fff;
 }
 
-/* Premium Custom Scrollbars */
+/*
+ * The platform scrollbar (base_sdk app/styles/rokct-scroll.css, the block
+ * the fleet shells merged: southriver-web#12, hosting#24, polaris-web#12),
+ * inlined because this site is not composed from base_sdk. Same rules and
+ * variables; the thumb follows Tloumoka blue (--color-brand) and deepens to
+ * --color-brand-deep on hover. `html:root` matches the shells' override.
+ */
+html:root {
+  --rokct-scroll-width: 6px;
+  --rokct-scroll-track: transparent;
+  --rokct-scroll-thumb: var(--color-brand);
+  --rokct-scroll-thumb-hover: var(--color-brand-deep);
+}
+
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: var(--rokct-scroll-width);
 }
+
 ::-webkit-scrollbar-track {
-  background: hsl(var(--bg-deep));
+  background: var(--rokct-scroll-track);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--bg-panel));
-  border-radius: 4px;
+  background: var(--rokct-scroll-thumb);
+  border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
+  background: var(--rokct-scroll-thumb-hover);
 }
 
-/* Micro-animations and Utilities */
-.glass {
-  background: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(12px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--rokct-scroll-thumb);
 }
 
-.glass-accent {
-  background: rgba(24, 20, 18, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid hsla(var(--primary) / 0.15);
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--rokct-scroll-thumb-hover);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #ffffff 30%, hsla(var(--primary) / 1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+}
+.dark ::selection {
+  color: var(--color-page);
 }
 
-.gradient-accent-text {
-  background: linear-gradient(135deg, hsla(var(--accent-gold) / 1) 0%, hsla(var(--primary) / 1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.on-dark :focus-visible {
+  outline-color: var(--color-brand-glow);
 }
 
-/* Card hover glow */
-.hover-glow {
-  transition: all 0.3s var(--transition-smooth);
-}
-.hover-glow:hover {
-  border-color: hsla(var(--primary) / 0.3);
-  box-shadow: 0 10px 30px -10px hsla(var(--primary) / 0.2);
-  transform: translateY(-4px);
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.032em;
+    word-spacing: 0.02em;
+    line-height: 0.95;
+  }
+
+  /* Product stage: soft studio light falling from the top left. */
+  .stage {
+    background:
+      radial-gradient(120% 90% at 30% 10%, #f8f7f4 0%, transparent 60%),
+      linear-gradient(180deg, var(--color-stage) 0%, var(--color-stage-2) 100%);
+  }
+  .stage-dark {
+    background:
+      radial-gradient(110% 90% at 50% 0%, #2a2e36 0%, transparent 62%),
+      linear-gradient(180deg, #17191d 0%, #0f1013 100%);
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid var(--color-line-2);
+    background: #fff;
+    padding: 14px 16px;
+    font-size: 16px;
+    color: var(--color-ink);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .dark .field {
+    background: var(--color-page);
+  }
+  .field::placeholder {
+    color: color-mix(in oklab, var(--color-ink-3) 75%, transparent);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-brand) 16%, transparent);
+  }
 }
 
-/* Badge active styling */
-.badge-female {
-  background: linear-gradient(90deg, rgba(236, 72, 153, 0.15) 0%, rgba(249, 115, 22, 0.15) 100%);
-  border: 1px solid rgba(236, 72, 153, 0.3);
-  color: #f472b6;
+/* Photo / cutaway reveal. --pos (0–100) is set inline by SplitReveal. */
+.split-frame .split-cut {
+  clip-path: inset(0 0 0 calc(var(--pos) * 1%));
+  transition: clip-path 0.5s var(--ease-out-quint);
+}
+.split-frame .split-seam {
+  left: calc(var(--pos) * 1%);
+  transition: left 0.5s var(--ease-out-quint);
+}
+.split-frame[data-dragging] .split-cut,
+.split-frame[data-dragging] .split-seam {
+  transition: none;
+}
+.split-frame .split-tag {
+  transition: opacity 0.3s;
+}
+.split-frame .split-tag[data-side="photo"] {
+  opacity: clamp(0, calc((var(--pos) - 14) / 8), 1);
+}
+.split-frame .split-tag[data-side="cut"] {
+  opacity: clamp(0, calc((86 - var(--pos)) / 8), 1);
+}
+.split-input:focus-visible ~ .split-seam .split-knob {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+}
+.split-frame[data-demo] .split-cut,
+.split-frame[data-demo] .split-seam {
+  transition: none;
+}
+.split-knob {
+  transition:
+    scale 0.3s var(--ease-out-quint),
+    translate 0.3s var(--ease-out-quint),
+    box-shadow 0.3s var(--ease-out-quint);
+}
+.split-frame[data-dragging] .split-knob {
+  scale: 0.92;
+}
+@media (hover: hover) {
+  .split-frame:not([data-dragging]):hover .split-knob {
+    scale: 1.06;
+    translate: -50% calc(-50% - 2px);
+    box-shadow:
+      0 18px 36px -10px rgb(17 18 20 / 0.5),
+      0 0 0 4px rgb(255 255 255 / 0.35);
+  }
+}
+/* Pulse ring, only while the one-off demo sweep runs. */
+.split-knob::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid var(--color-gold);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.7),
+    0 0 18px 2px color-mix(in oklab, var(--color-gold) 35%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.split-frame[data-demo] .split-knob::after {
+  animation: split-pulse 0.8s var(--ease-out-quint) 2 both;
+}
+@keyframes split-pulse {
+  0% {
+    opacity: 0.95;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+/* "Drag" pill under the knob. Fades for good once the visitor moves it. */
+.split-hint {
+  top: calc(50% + 36px);
+  transition: opacity 0.6s var(--ease-out-quint), translate 0.6s var(--ease-out-quint);
+}
+.split-frame[data-moved] .split-hint {
+  opacity: 0;
+  translate: -50% 4px;
+}
+.split-label {
+  text-shadow:
+    0 0 2px #f1f0ec,
+    0 0 6px #f1f0ec,
+    0 0 10px #f1f0ec;
+}
+.split-ink * {
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.split-ink .o,
+.split-ink .l,
+.split-ink .f,
+.split-ink .h,
+.split-ink .c,
+.split-ink .ph {
+  fill: none;
+  stroke: var(--color-brand);
+}
+.split-ink .o {
+  stroke-width: 1.6;
+}
+.split-ink .l {
+  stroke-width: 1;
+}
+.split-ink .f {
+  stroke-width: 0.75;
+  stroke-opacity: 0.75;
+}
+.split-ink .h {
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+  stroke-opacity: 0.8;
+}
+.split-ink .c {
+  stroke-width: 0.75;
+  stroke-dasharray: 18 4 3 4;
+  stroke-opacity: 0.55;
+}
+.split-ink .ph {
+  stroke-width: 0.9;
+  stroke-dasharray: 22 4 3 4 3 4;
+  stroke-opacity: 0.75;
+}
+.split-ink .stitch {
+  stroke-dasharray: 3 3;
+}
+.split-ink .paper {
+  fill: #fbfbf9;
+}
+.split-ink .o.paper {
+  fill: color-mix(in oklab, #fdfdfb 70%, var(--color-brand-soft));
+  fill-opacity: 0.62;
+}
+.split-ink .sec {
+  fill: var(--hatch);
+  stroke: var(--color-brand);
+  stroke-width: 1.1;
+}
+.split-ink .oil {
+  fill: var(--dots);
+}
+.split-ink .mesh {
+  fill: color-mix(in oklab, var(--color-brand) 10%, transparent);
+}
+.split-ink .tape {
+  fill: color-mix(in oklab, var(--color-brand) 14%, #fff);
+  stroke: var(--color-brand);
+  stroke-width: 1;
+}
+.split-ink .bead {
+  fill: #fff;
+  stroke: var(--color-brand);
+  stroke-width: 0.75;
+}
+.split-ink .seal {
+  fill: var(--color-gold);
+  stroke: #a77a0d;
+  stroke-width: 0.9;
+}
+.split-ink .band {
+  fill: var(--color-gold-soft);
+  stroke: #a77a0d;
+  stroke-width: 0.75;
+}
+.split-ink .seal-l {
+  fill: none;
+  stroke: #c08c0c;
+  stroke-width: 1.4;
+}
+.split-ink .strap {
+  fill: none;
+  stroke: var(--color-brand);
+  stroke-width: 5;
+  stroke-opacity: 0.85;
+}
+.split-ink .tag {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 500;
+  fill: #a77a0d;
+}
+
+/* Scroll reveal: content is server-rendered visible; only after hydration
+   (html.reveal-ready) do off-screen blocks wait for the viewport. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    transition:
+      opacity 1s var(--ease-out-quint),
+      transform 1s var(--ease-out-quint);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal-ready [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
