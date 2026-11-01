@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "repo": "RokctAI/nextjs",
+  "commit": "acf786b75c3d80071752a53b6cbdaad3050cdb83",
+  "taken_at": "2026-11-01T10:18:39Z",
+  "dir": "shots/acf786b75c3d80071752a53b6cbdaad3050cdb83",
+  "files": {
+    "desktop-light.webp": {
+      "width": 1200,
+      "height": 833,
+      "bytes": 54012,
+      "sha256": "eb3d5115070fbbb3ad64f48e7e69faf19c9d0d2e9c1cf3946bb91cd0674c2e2b"
+    },
+    "desktop-dark.webp": {
+      "width": 1200,
+      "height": 833,
+      "bytes": 54214,
+      "sha256": "b5faa76443ddd7fac46c8922ff62906962e872d6a8c257eede6402793779e0f2"
+    },
+    "option-light.webp": {
+      "width": 800,
+      "height": 500,
+      "bytes": 30844,
+      "sha256": "a7e48aad8ed7512de74109734ec68ae43138110690f695d29982d888ed3f10b0"
+    },
+    "option-dark.webp": {
+      "width": 800,
+      "height": 500,
+      "bytes": 31040,
+      "sha256": "40d7e0360ec894cf6055be32cce714e6ce16ccc85d755e6d177de14c015ee80b"
+    },
+    "phone-light.webp": {
+      "width": 560,
+      "height": 1149,
+      "bytes": 47128,
+      "sha256": "9e9f750d3b8cb17a60cc6422e02198c6e8afc5cbdc998de9f5c5a22a6a7bac6c"
+    },
+    "phone-dark.webp": {
+      "width": 560,
+      "height": 1149,
+      "bytes": 47170,
+      "sha256": "d4ae1449e4887260860fa045a5be51a45a3a68a32121b092819f97ab035bb404"
+    }
+  }
+}
