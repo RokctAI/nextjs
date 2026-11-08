@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "repo": "RokctAI/nextjs",
-  "commit": "5d40e9ffd8fd709482bb2df40c6f510aef2b2bfa",
-  "taken_at": "2026-11-01T10:24:17Z",
-  "dir": "shots/5d40e9ffd8fd709482bb2df40c6f510aef2b2bfa",
+  "commit": "5f1d2faa75916d79fdeccfa377bf9509da824c82",
+  "taken_at": "2026-11-08T02:31:52Z",
+  "dir": "shots/5f1d2faa75916d79fdeccfa377bf9509da824c82",
   "files": {
     "desktop-light.webp": {
       "width": 1200,
